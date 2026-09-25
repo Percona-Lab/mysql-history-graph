@@ -546,7 +546,9 @@ function writeHash() {
   const h = new URLSearchParams({ sel: state.sel, view: state.view });
   const shown = DATA.LANES.filter(f => !state.hidden[f]);
   if (shown.length < DATA.LANES.length) h.set('fam', shown.join(','));
-  history.replaceState(null, '', '#' + h.toString());
+  // Hosts that embed the page in a sandboxed or srcdoc frame refuse history
+  // updates; the view still works there, it just isn't kept in the address.
+  try { history.replaceState(null, '', '#' + h.toString()); } catch (err) { /* not linkable here */ }
 }
 
 function render() {
