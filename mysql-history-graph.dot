@@ -11,6 +11,7 @@ digraph mysql_history_graph {
        MariaDB ColumnStore:             dodgerblue
 	   Drizzle: 		                blue4
 	   Percona Server: 	                LTS=orange, Innovation=orange3
+	   Percona XtraDB Cluster:          #1a7f7a
 	   GreatSQL:                        darkgreen
 	   AliSQL:                          #ff6a00
 	   Facebook MySQL:                  #3b5998
@@ -302,8 +303,8 @@ digraph mysql_history_graph {
 	"Percona Server 8.1" [color="orange3"];
 	"Percona Server 8.2" [color="orange3"];
 	"Percona Server 8.3" [color="orange3"];
-	"Percona Server 8.4" [color="orange3"];
-	"Percona Server 9.7" [color="orange3"];
+	"Percona Server 8.4" [color="orange"];
+	"Percona Server 9.7" [color="orange"];
 	"MySQL 5.0" -> "Percona Server 5.0";
 	"MySQL 5.1" -> "Percona Server 5.1";
 	"Percona Server 5.0" -> "Percona Server 5.1";
@@ -326,6 +327,26 @@ digraph mysql_history_graph {
 	"MySQL 8.4" -> "Percona Server 8.4";
 	"Percona Server 8.4" -> "Percona Server 9.7";
 	"MySQL 9.7" -> "Percona Server 9.7";
+
+	/* Percona XtraDB Cluster - Percona Server + Galera (Codership).
+	   No public PXC builds of 8.1-8.3 or 9.0-9.6. */
+	"Percona XtraDB Cluster 5.5" [color="#1a7f7a"];
+	"Percona XtraDB Cluster 5.6" [color="#1a7f7a"];
+	"Percona XtraDB Cluster 5.7" [color="#1a7f7a"];
+	"Percona XtraDB Cluster 8.0" [color="#1a7f7a"];
+	"Percona XtraDB Cluster 8.4" [color="#1a7f7a"];
+	"Percona XtraDB Cluster 9.7" [color="#1a7f7a"];
+	"Percona Server 5.5" -> "Percona XtraDB Cluster 5.5";
+	"Percona Server 5.6" -> "Percona XtraDB Cluster 5.6";
+	"Percona XtraDB Cluster 5.5" -> "Percona XtraDB Cluster 5.6";
+	"Percona Server 5.7" -> "Percona XtraDB Cluster 5.7";
+	"Percona XtraDB Cluster 5.6" -> "Percona XtraDB Cluster 5.7";
+	"Percona Server 8.0" -> "Percona XtraDB Cluster 8.0";
+	"Percona XtraDB Cluster 5.7" -> "Percona XtraDB Cluster 8.0";
+	"Percona Server 8.4" -> "Percona XtraDB Cluster 8.4";
+	"Percona XtraDB Cluster 8.0" -> "Percona XtraDB Cluster 8.4";
+	"Percona Server 9.7" -> "Percona XtraDB Cluster 9.7";
+	"Percona XtraDB Cluster 8.4" -> "Percona XtraDB Cluster 9.7";
 
 	/* Drizzle */
 	"Drizzle 7.0" [color="blue4"];
