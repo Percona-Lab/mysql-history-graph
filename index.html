@@ -188,6 +188,7 @@ const DATA = (function () {
     mysql: { name: 'MySQL', c: '#c4312a', blurb: 'The original, created by MySQL AB (David Axmark, Allan Larsson and Michael “Monty” Widenius). Owned by Sun from 2008 and by Oracle since 2010. Since 8.1 it ships quarterly Innovation releases between Long-Term Support releases.' },
     village: { name: 'VillageSQL', c: '#9446c9', blurb: 'A fork that tracks MySQL 8.4. Its 0.0.6 release ships three server codebases: one tracking MySQL 8.4, one MySQL 9.7 and one Percona Server 8.4.' },
     percona: { name: 'Percona Server', c: '#c8680a', blurb: 'Percona’s drop-in replacement for MySQL: XtraDB (its enhanced InnoDB), extra instrumentation, and open-source versions of features MySQL keeps in Enterprise Edition, such as the thread pool and audit logging.' },
+    pxc: { name: 'Percona XtraDB Cluster', c: '#1a7f7a', blurb: 'Percona’s synchronous multi-primary cluster: Percona Server plus the Galera replication library from Codership and the wsrep API. Each major version is built on the matching Percona Server release.' },
     greatsql: { name: 'GreatSQL', c: '#2f6b3a', blurb: 'A fork of Percona Server maintained by the GreatOpenSource community in China.' },
     tendb: { name: 'TenDB', c: '#0a5bd6', blurb: 'The fork by Tencent Games’ CROS DBA team, used as the data layer of TenDB Cluster. Based on Percona Server 5.7.20.' },
     mariadb: { name: 'MariaDB', c: '#1f4fa3', blurb: 'Forked from MySQL 5.1 in 2009 by Michael Widenius after Sun bought MySQL AB. MySQL is named after his daughter My, MariaDB after his younger daughter Maria. Numbering jumped from 5.5 to 10.0 in 2014.' },
@@ -197,7 +198,7 @@ const DATA = (function () {
     alisql: { name: 'AliSQL', c: '#c24f00', blurb: 'Alibaba’s open-source branch of MySQL (github.com/alibaba/AliSQL).' },
     drizzle: { name: 'Drizzle', c: '#1e2a78', blurb: 'A rewrite of the MySQL 6.0 code as a small, plugin-based kernel, led by Brian Aker from 2008. It dropped stored procedures, triggers, views and the query cache. Development stopped after 7.2.' }
   };
-  const LANES = ['ndb', 'rondb', 'mysql', 'village', 'percona', 'greatsql', 'tendb', 'mariadb', 'columnar', 'facebook', 'webscale', 'alisql', 'drizzle'];
+  const LANES = ['ndb', 'rondb', 'mysql', 'village', 'percona', 'pxc', 'greatsql', 'tendb', 'mariadb', 'columnar', 'facebook', 'webscale', 'alisql', 'drizzle'];
 
   const R = [];
   const r = (id, f, d, s, note, flag, v) => R.push({ id: id, f: f, d: d, s: s, note: note || '', flag: flag || '', v: v || id.split(' ').pop() });
@@ -257,17 +258,25 @@ const DATA = (function () {
   r('RonDB 26.02', 'rondb', '2026-02', 'dev', '', 'v');
 
   // Percona Server
-  r('Percona Server 5.0', 'percona', '2008', 'ga', 'Percona’s patched builds of MySQL 5.0, where the Percona Server line begins.', 'c');
-  r('Percona Server 5.1', 'percona', '2009', 'ga', 'Introduced XtraDB, Percona’s enhanced InnoDB, which MariaDB then adopted as its default InnoDB.', 'c');
-  r('Percona Server 5.5', 'percona', '2011', 'ga', 'Took group commit from MariaDB 5.3.', 'c');
-  r('Percona Server 5.6', 'percona', '2013-10', 'ga');
-  r('Percona Server 5.7', 'percona', '2016-02', 'ga', 'Its buffer-pool mutex split, temporary-table replication fixes and many bug fixes were contributed back into MySQL 8.0.');
-  r('Percona Server 8.0', 'percona', '2018-12', 'ga');
-  r('Percona Server 8.1', 'percona', '2023-10', 'short', '', 'c');
-  r('Percona Server 8.2', 'percona', '2024-01', 'short', '', 'c');
-  r('Percona Server 8.3', 'percona', '2024-04', 'short', '', 'c');
-  r('Percona Server 8.4', 'percona', '2024-08', 'lts', 'Tracks the MySQL 8.4 Long-Term Support release.', 'c');
-  r('Percona Server 9.7', 'percona', null, 'lts', 'Tracks MySQL 9.7.', 'u');
+  r('Percona Server 5.0', 'percona', '2008', 'ga', 'Percona’s patched “highperf” builds of MySQL 5.0 (Percona was founded in 2006), where the Percona Server line begins.', 'c');
+  r('Percona Server 5.1', 'percona', '2009', 'ga', 'Introduced XtraDB, Percona’s enhanced InnoDB (announced December 2008 as a fork of the InnoDB plugin 1.0.2), which MariaDB then adopted as its default InnoDB. The “Percona Server” name was adopted during the 5.1 series in 2010.', 'c');
+  r('Percona Server 5.5', 'percona', '2011-04', 'ga', 'First stable release 5.5.11-20.2 on 28 April 2011. Took binary log group commit from MariaDB 5.3.');
+  r('Percona Server 5.6', 'percona', '2013-10', 'ga', 'First GA release 5.6.13-61.0 on 7 October 2013.');
+  r('Percona Server 5.7', 'percona', '2016-02', 'ga', 'First GA release 5.7.10-3 on 5 February 2016. Percona’s buffer-pool mutex split (MySQL bug #75534) was contributed back and landed in MySQL 8.0 as WL#8423.');
+  r('Percona Server 8.0', 'percona', '2018-12', 'ga', 'First GA release 8.0.13-3 on 21 December 2018. 8.0.46-37 (June 2026) was the last standard release; MySQL 8.0 is end of life, and 8.0 continues only as post-EOL builds.');
+  r('Percona Server 8.1', 'percona', '2023-11', 'short', 'Percona’s first Innovation release, 8.1.0-1 on 27 November 2023.');
+  r('Percona Server 8.2', 'percona', '2024-02', 'short', '8.2.0-1 on 5 February 2024.');
+  r('Percona Server 8.3', 'percona', '2024-04', 'short', '8.3.0-1 on 16 April 2024, the last Percona Innovation release: Percona skipped all of MySQL 9.0–9.6.');
+  r('Percona Server 8.4', 'percona', '2024-08', 'lts', 'Tracks the MySQL 8.4 Long-Term Support release. First release 8.4.0-1 on 28 August 2024.');
+  r('Percona Server 9.7', 'percona', '2026-08', 'lts', 'Tracks the MySQL 9.7 Long-Term Support release. 9.7.0 was skipped; the first build is 9.7.1-1 on 5 August 2026.');
+
+  // Percona XtraDB Cluster
+  r('Percona XtraDB Cluster 5.5', 'pxc', '2012-04', 'ga', 'The first GA release, 5.5.20, built on Percona Server 5.5.20 and the Galera library.', '', 'PXC 5.5');
+  r('Percona XtraDB Cluster 5.6', 'pxc', '2014-01', 'ga', 'First GA release 5.6.15-25.2 on 30 January 2014, with Galera 3.', '', 'PXC 5.6');
+  r('Percona XtraDB Cluster 5.7', 'pxc', '2016-09', 'ga', 'First GA release 5.7.14-26.17 on 29 September 2016. Added PXC Strict Mode and Galera instrumentation in Performance Schema.', '', 'PXC 5.7');
+  r('Percona XtraDB Cluster 8.0', 'pxc', '2020-04', 'ga', 'First GA release 8.0.18-9.3 on 29 April 2020, with Galera 4. PXC 8.1–8.3 Innovation builds were never publicly released.', '', 'PXC 8.0');
+  r('Percona XtraDB Cluster 8.4', 'pxc', '2024-12', 'lts', 'First release 8.4.2-2 on 11 December 2024, tracking MySQL 8.4 LTS.', '', 'PXC 8.4');
+  r('Percona XtraDB Cluster 9.7', 'pxc', '2026-09', 'lts', 'First release 9.7.1-1, shipped in Percona Distribution for MySQL 9.7.1 on 10 September 2026. 9.7.0 was skipped.', '', 'PXC 9.7');
 
   // GreatSQL, TenDB, VillageSQL
   r('GreatSQL 8.0', 'greatsql', '2021', 'ga', 'Based on Percona Server 8.0.', 'c');
@@ -378,6 +387,9 @@ const DATA = (function () {
   e(M('5.7'), P('5.7')); e(P('5.6'), P('5.7'));
   e(P('5.7'), P('8.0')); e(M('8.0'), P('8.0'));
   [['8.0', '8.1'], ['8.1', '8.2'], ['8.2', '8.3'], ['8.3', '8.4'], ['8.4', '9.7']].forEach(x => { e(P(x[0]), P(x[1])); e(M(x[1]), P(x[1])); });
+  const X = v => 'Percona XtraDB Cluster ' + v;
+  e(P('5.5'), X('5.5'));
+  [['5.5', '5.6'], ['5.6', '5.7'], ['5.7', '8.0'], ['8.0', '8.4'], ['8.4', '9.7']].forEach(x => { e(X(x[0]), X(x[1])); e(P(x[1]), X(x[1])); });
   e(M('6.0'), 'Drizzle 7.0'); e('Drizzle 7.0', 'Drizzle 7.1'); e('Drizzle 7.1', 'Drizzle 7.2', 'd');
   e('RonDB 21.04', 'RonDB 22.10'); e('RonDB 22.10', 'RonDB 24.10');
   e('RonDB 24.10', 'RonDB 25.10', 'd'); e('RonDB 25.10', 'RonDB 26.02', 'd');
@@ -415,6 +427,7 @@ const DATA = (function () {
     { id: 'ev-ab', t: 1995.4, when: '1995', short: 'MySQL AB', title: 'MySQL AB is founded', note: 'David Axmark, Allan Larsson and Michael “Monty” Widenius found MySQL AB in Sweden. The first MySQL release goes out in May 1995.' },
     { id: 'ev-ndb', t: 2003.8, when: '2003', short: 'NDB acquired', title: 'MySQL AB acquires NDB', note: 'MySQL AB buys the NDB clustered database technology from Ericsson. It becomes MySQL Cluster.' },
     { id: 'ev-innodb', t: 2005.8, when: 'October 2005', short: 'Oracle buys InnoDB', title: 'Oracle buys Innobase', note: 'Oracle acquires Innobase Oy, the Finnish company behind InnoDB, MySQL’s main transactional storage engine.' },
+    { id: 'ev-percona', t: 2006.5, when: '2006', short: 'Percona founded', title: 'Percona is founded', note: 'Peter Zaitsev and Vadim Tkachenko, who had led MySQL AB’s High Performance Group, leave MySQL AB and found Percona as a MySQL performance consultancy. Its patched builds become Percona Server.' },
     { id: 'ev-sun', t: 2008.1, when: 'February 2008', short: 'Sun buys MySQL AB', title: 'Sun buys MySQL AB', note: 'Sun Microsystems completes its purchase of MySQL AB for about one billion US dollars. Monty Widenius leaves Sun in early 2009 and starts MariaDB.' },
     { id: 'ev-oracle', t: 2010.05, when: 'January 2010', short: 'Oracle buys Sun', title: 'Oracle completes its purchase of Sun', note: 'Oracle takes over Sun Microsystems, and with it MySQL. MySQL 5.5, released that December, is the first GA under Oracle.' },
     { id: 'ev-oursql', t: 2026.4, when: '27 May 2026', short: 'OurSQL Foundation', title: 'The OurSQL Foundation launches', note: 'A vendor-neutral 501(c)(6) non-profit for the MySQL ecosystem: events, shared resources and a collective voice on the MySQL roadmap, working alongside Oracle. Its founding board comes from Percona, PlanetScale, PingCAP, VillageSQL, Alibaba and the wider community, with Vadim Tkachenko as president.', url: 'https://oursqlfoundation.org/news/press-releases/oursql-foundation-launches/' }
