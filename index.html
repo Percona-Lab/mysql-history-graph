@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MySQL family tree</title>
+<meta name="description" content="Every server that grew out of MySQL, on one interactive timeline.">
+<style>
+:root {
+  --ground: #f4f1ea;
+  --paper: #fbf9f4;
+  --stripe: #f6f3ec;
+  --ink: #1c1b19;
+  --ink-2: #45413a;
+  --ink-3: #5b564d;
+  --rule: #d9d3c5;
+  --grid: #e4dfd3;
+  --contrib: #a39d90;
+  --panel: #1c1b19;
+  --panel-ink: #f4f1ea;
+  --panel-2: #c9c2b3;
+  --panel-3: #a8a192;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans); }
+button { font: inherit; color: inherit; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid #1c5fd1; outline-offset: 2px; }
+a { color: #9a2a22; } a:hover { color: #6e1c16; }
+
+.wrap { max-width: 1440px; margin: 0 auto; padding: 36px 40px 40px; display: flex; flex-direction: column; gap: 22px; }
+header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px 32px; flex-wrap: wrap; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #625d53; }
+h1 { margin: 8px 0; font-family: var(--serif); font-weight: 400; font-size: clamp(38px, 5vw, 60px); line-height: .98; letter-spacing: -.01em; }
+.lede { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink-2); max-width: 660px; }
+.views { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px; background: #e9e4d8; border-radius: 10px; }
+.views button { height: 36px; padding: 0 14px; border: 0; border-radius: 7px; background: transparent; color: #35322d; font-family: var(--mono); font-size: 12.5px; font-weight: 500; cursor: pointer; }
+.views button[aria-pressed="true"] { background: var(--ink); color: var(--panel-ink); }
+
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 336px; gap: 24px; align-items: start; }
+@media (max-width: 1040px) { .main { grid-template-columns: minmax(0, 1fr); } }
+
+.timeline { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.controls { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; max-width: 720px; }
+.chip { height: 28px; padding: 0 10px; display: flex; align-items: center; gap: 7px; border: 1px solid #cfc8b8; border-radius: 14px; background: var(--paper); font-size: 12.5px; cursor: pointer; }
+.chip .sw { width: 9px; height: 9px; border-radius: 50%; }
+.chip[aria-pressed="false"] { background: #ece7dc; color: #6b665c; border-color: #e0dacd; }
+.chip[aria-pressed="false"] .sw { opacity: .35; }
+.toggles { display: flex; flex-direction: column; gap: 6px; }
+.toggles label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+.toggles input { width: 16px; height: 16px; margin: 0; accent-color: var(--ink); }
+
+.scroller { overflow-x: auto; }
+.tl-body { display: flex; min-width: 710px; }
+.lanes { width: 150px; flex-shrink: 0; display: flex; flex-direction: column; }
+.lanes .head { height: 44px; display: flex; align-items: flex-end; padding-bottom: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #625d53; }
+.lane { height: 40px; display: flex; align-items: center; gap: 8px; padding-right: 10px; font-size: 12.5px; line-height: 1.15; font-weight: 500; }
+.lane .bar { width: 14px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+.plotcol { position: relative; flex-grow: 1; min-width: 0; }
+.events { position: relative; height: 44px; overflow: hidden; }
+.ev { position: absolute; transform: translateX(-50%); padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+.ev .t { font-family: var(--mono); font-size: 10.5px; white-space: nowrap; background: var(--paper); padding: 0 3px; }
+.ev .d { width: 8px; height: 8px; transform: rotate(45deg); background: var(--paper); border: 1.5px solid var(--ink); margin-bottom: 3px; }
+.ev[aria-pressed="true"] .t { font-weight: 600; }
+.ev--quiet .t { visibility: hidden; }
+.ev--quiet:hover .t, .ev--quiet:focus-visible .t { visibility: visible; position: relative; z-index: 3; }
+.ev[aria-pressed="true"] .d { background: var(--ink); }
+.plot { position: relative; overflow: hidden; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.plot .abs { position: absolute; }
+.plot svg { position: absolute; left: 0; top: 0; pointer-events: none; }
+.node { position: absolute; width: 24px; height: 24px; padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.node .dot { display: block; border-radius: 50%; border-width: 2px; }
+.node .lbl { position: absolute; top: 21px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--mono); font-size: 10.5px; line-height: 1; color: #35322d; }
+.node:hover .lbl { display: block !important; font-weight: 600; z-index: 9; background: var(--paper); padding: 1px 2px; }
+.axis { position: relative; height: 26px; overflow: hidden; }
+.axis span { position: absolute; top: 7px; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; font-size: 12px; color: var(--ink-2); }
+.legend > span { display: flex; align-items: center; gap: 6px; }
+.lg-dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ink-2); }
+
+.panel { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; background: var(--panel); color: var(--panel-ink); border-radius: 12px; padding: 26px 24px 20px; display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 1040px) { .panel { position: static; max-height: none; } }
+.fam { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--panel-2); }
+.fam .sw { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 2px #f4f1ea33; }
+.panel h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 1.02; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.facts div { display: flex; flex-direction: column; gap: 3px; }
+.k { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--panel-3); }
+.facts dd { margin: 0; font-size: 15px; font-weight: 500; }
+.flag { margin: 0; font-size: 12.5px; line-height: 1.45; color: #d9c79a; }
+.note { margin: 0; font-size: 14.5px; line-height: 1.55; color: #ece7dc; }
+.rels { display: flex; flex-direction: column; gap: 8px; }
+.rels .list { display: flex; flex-wrap: wrap; gap: 6px; }
+.rel { min-height: 32px; padding: 5px 10px; display: flex; align-items: center; gap: 7px; background: #2b2925; border: 1px solid #4a463f; border-radius: 8px; color: var(--panel-ink); font-size: 12.5px; cursor: pointer; text-align: left; }
+.rel:hover { border-color: #6d685e; }
+.rel .sw { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.rel .why { color: var(--panel-3); font-size: 11.5px; }
+.lineage { font-family: var(--mono); font-size: 11.5px; color: var(--panel-2); }
+.about { border-top: 1px solid #3a3732; padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+.about p { margin: 0; font-size: 13.5px; line-height: 1.55; color: #d6d0c3; }
+.source { margin-top: auto; font-size: 11.5px; line-height: 1.5; color: var(--panel-3); }
+.source a, .more { color: #e8b4a0; }
+.more { font-size: 13.5px; }
+@media (max-width: 640px) { .wrap { padding: 24px 16px 32px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow" id="count">Lineage map</div>
+      <h1>The MySQL family tree</h1>
+      <p class="lede">Every server that grew out of MySQL, drawn on one timeline. Select a release to see its date, what it brought, and the code it came from and fed into.</p>
+    </div>
+    <nav class="views" id="views" aria-label="Time range"></nav>
+  </header>
+  <div class="main">
+    <section class="timeline" aria-label="Timeline">
+      <div class="controls">
+        <div class="chips" id="chips" role="group" aria-label="Show or hide families"></div>
+        <div class="toggles">
+          <label><input type="checkbox" id="opt-trace" data-key="opt-trace"> Trace lineage of selection</label>
+          <label><input type="checkbox" id="opt-contrib" data-key="opt-contrib"> Show contributed code</label>
+        </div>
+      </div>
+      <div class="scroller">
+        <div class="tl-body" id="tl-body">
+          <div class="lanes" id="lanes" aria-hidden="true"></div>
+          <div class="plotcol" id="plotcol">
+            <div class="events" id="events"></div>
+            <div class="plot" id="plot"></div>
+            <div class="axis" id="axis" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+      <div class="legend" aria-label="Legend">
+        <span><span class="lg-dot" style="background: var(--ink-2)"></span>GA / long-term support</span>
+        <span><span class="lg-dot"></span>Innovation / rolling</span>
+        <span><span class="lg-dot" style="border-style: dashed"></span>In development</span>
+        <span><span class="lg-dot" style="border-style: dotted"></span>Abandoned or pre-GA</span>
+        <span><svg width="26" height="6" aria-hidden="true"><path d="M1 3 L25 3" stroke="#45413a" stroke-width="1.6"/></svg>Code base</span>
+        <span><svg width="26" height="6" aria-hidden="true"><path d="M1 3 L25 3" stroke="#a39d90" stroke-width="1.6" stroke-dasharray="3 3"/></svg>Contributed code</span>
+      </div>
+    </section>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+</div>
+<script>
+'use strict';
+
+// Release data. Lineage follows mysql-history-graph.dot; dates and notes are
+// added on top. Flags: c = approximate year, q = assumed from the quarterly
+// cadence, v = read from a year.month version number, u = no date recorded.
+const DATA = (function () {
+  const F = {
+    ndb: { name: 'MySQL Cluster', c: '#8e1f1b', blurb: 'The NDB shared-nothing clustered engine, first developed at Ericsson and bought by MySQL AB in 2003. It ships as its own product line on top of the matching MySQL server.' },
+    rondb: { name: 'RonDB', c: '#a07c00', blurb: 'A distribution of NDB Cluster from Logical Clocks (Hopsworks), led by NDB’s original designer Mikael Ronström. Its version numbers are year.month.' },
+    mysql: { name: 'MySQL', c: '#c4312a', blurb: 'The original, created by MySQL AB (David Axmark, Allan Larsson and Michael “Monty” Widenius). Owned by Sun from 2008 and by Oracle since 2010. Since 8.1 it ships quarterly Innovation releases between Long-Term Support releases.' },
+    village: { name: 'VillageSQL', c: '#9446c9', blurb: 'A fork that tracks MySQL 8.4. Its 0.0.6 release ships three server codebases: one tracking MySQL 8.4, one MySQL 9.7 and one Percona Server 8.4.' },
+    percona: { name: 'Percona Server', c: '#c8680a', blurb: 'Percona’s drop-in replacement for MySQL: XtraDB (its enhanced InnoDB), extra instrumentation, and open-source versions of features MySQL keeps in Enterprise Edition, such as the thread pool and audit logging.' },
+    greatsql: { name: 'GreatSQL', c: '#2f6b3a', blurb: 'A fork of Percona Server maintained by the GreatOpenSource community in China.' },
+    tendb: { name: 'TenDB', c: '#0a5bd6', blurb: 'The fork by Tencent Games’ CROS DBA team, used as the data layer of TenDB Cluster. Based on Percona Server 5.7.20.' },
+    mariadb: { name: 'MariaDB', c: '#1f4fa3', blurb: 'Forked from MySQL 5.1 in 2009 by Michael Widenius after Sun bought MySQL AB. MySQL is named after his daughter My, MariaDB after his younger daughter Maria. Numbering jumped from 5.5 to 10.0 in 2014.' },
+    columnar: { name: 'InfiniDB → ColumnStore', c: '#3d6f94', blurb: 'A columnar analytics engine. Calpont’s InfiniDB was relicensed under the GPL in 2013; after InfiniDB Inc. closed in 2014, MariaDB carried it on as ColumnStore, which later became part of MariaDB itself.' },
+    facebook: { name: 'Facebook MySQL', c: '#3b5998', blurb: 'Meta’s production branches of MySQL (facebook/mysql-5.6 and mysql-8.0), home of MyRocks, the RocksDB storage engine.' },
+    webscale: { name: 'WebScaleSQL', c: '#5a2f7a', blurb: 'A shared branch of MySQL 5.6 announced in 2014 by engineers at Facebook, Google, LinkedIn and Twitter, pooling their patches for running MySQL at very large scale.' },
+    alisql: { name: 'AliSQL', c: '#c24f00', blurb: 'Alibaba’s open-source branch of MySQL (github.com/alibaba/AliSQL).' },
+    drizzle: { name: 'Drizzle', c: '#1e2a78', blurb: 'A rewrite of the MySQL 6.0 code as a small, plugin-based kernel, led by Brian Aker from 2008. It dropped stored procedures, triggers, views and the query cache. Development stopped after 7.2.' }
+  };
+  const LANES = ['ndb', 'rondb', 'mysql', 'village', 'percona', 'greatsql', 'tendb', 'mariadb', 'columnar', 'facebook', 'webscale', 'alisql', 'drizzle'];
+
+  const R = [];
+  const r = (id, f, d, s, note, flag, v) => R.push({ id: id, f: f, d: d, s: s, note: note || '', flag: flag || '', v: v || id.split(' ').pop() });
+
+  // MySQL (MySQL AB, Sun, Oracle)
+  r('MySQL 1.0', 'mysql', '1995-05', 'early', 'Released to a limited group of four people, according to David Axmark and Michael Widenius.');
+  r('MySQL 3.11.1', 'mysql', '1996-03', 'early', 'The first public release, a binary distribution for Solaris.', 'c');
+  r('MySQL 3.19', 'mysql', '1996-11', 'ga', '', 'c');
+  r('MySQL 3.20', 'mysql', '1997', 'ga', '', 'c');
+  r('MySQL 3.21', 'mysql', '1998-01', 'ga', '', 'c');
+  r('MySQL 3.22', 'mysql', '1998-10', 'ga', '', 'c');
+  r('MySQL 3.23', 'mysql', '2001-01', 'ga', 'MyISAM, replication and full-text search, and the table-handler layer that brought in InnoDB and BerkeleyDB as transactional engines.');
+  r('MySQL 4.0', 'mysql', '2003-03', 'ga', 'Query cache, UNION, InnoDB in the standard server, and the embedded server library.');
+  r('MySQL 4.1', 'mysql', '2004-10', 'ga', 'Subqueries, prepared statements, per-column character sets with Unicode, and spatial (GIS) types.');
+  r('MySQL 5.0', 'mysql', '2005-10', 'ga', 'Stored procedures, triggers, views, cursors, INFORMATION_SCHEMA and XA transactions.');
+  r('MySQL 6.0', 'mysql', '2007-06', 'gone', 'An alpha series built around the Falcon storage engine, cancelled in 2009. Its optimizer work came back in 5.5 and later, and Drizzle forked from its code.', 'c');
+  r('MySQL 5.1', 'mysql', '2008-11', 'ga', 'Partitioning, row-based replication, the event scheduler and the plugin API. The biggest fork point on the chart: MariaDB, Percona Server 5.1, InfiniDB and the 6.x and 7.x Cluster lines all start here.');
+  r('MySQL 5.2', 'mysql', '2008-12', 'gone', 'A short-lived development series, abandoned before GA.', 'c');
+  r('MySQL 5.4', 'mysql', '2009-04', 'gone', 'Sun’s performance preview with InnoDB scalability patches. It was folded into 5.5 rather than shipped as GA.');
+  r('MySQL 5.5', 'mysql', '2010-12', 'ga', 'InnoDB becomes the default storage engine; semi-synchronous replication and PERFORMANCE_SCHEMA. The first GA under Oracle.');
+  r('MySQL 5.6', 'mysql', '2013-02', 'ga', 'GTID-based replication, online DDL, InnoDB full-text search, multi-threaded replicas and optimizer trace.');
+  r('MySQL 5.7', 'mysql', '2015-10', 'ga', 'A native JSON type, generated columns, multi-source replication and the sys schema. Group Replication became GA during the 5.7 series.');
+  r('MySQL 8.0', 'mysql', '2018-04', 'ga', 'A transactional data dictionary, window functions, common table expressions, roles and utf8mb4 by default. Numbering skipped from 5.7 to 8.0. End of life in April 2026.');
+  r('MySQL 8.1', 'mysql', '2023-07', 'short', 'The first Innovation release. From here Oracle ships quarterly Innovation releases between Long-Term Support releases.');
+  r('MySQL 8.2', 'mysql', '2023-10', 'short');
+  r('MySQL 8.3', 'mysql', '2024-01', 'short');
+  r('MySQL 8.4', 'mysql', '2024-04', 'lts', 'The first Long-Term Support release under the new model.');
+  r('MySQL 9.0', 'mysql', '2024-07', 'short', 'A VECTOR data type, and JavaScript stored programs in Enterprise Edition.');
+  r('MySQL 9.1', 'mysql', '2024-10', 'short');
+  r('MySQL 9.2', 'mysql', '2025-01', 'short');
+  r('MySQL 9.3', 'mysql', '2025-04', 'short');
+  r('MySQL 9.4', 'mysql', '2025-07', 'short');
+  r('MySQL 9.5', 'mysql', '2025-10', 'short', '', 'q');
+  r('MySQL 9.6', 'mysql', '2026-01', 'short', '', 'q');
+  r('MySQL 9.7', 'mysql', '2026-04', 'lts', 'The next Long-Term Support release after 8.4.', 'q');
+  r('MySQL 26.7', 'mysql', '2026-07', 'short', 'The newest MySQL entry on the source chart.', 'q');
+
+  // MySQL Cluster (NDB)
+  r('MySQL Cluster 6.2', 'ndb', '2007', 'ga', '', 'c');
+  r('MySQL Cluster 6.3', 'ndb', '2008', 'ga', '', 'c');
+  r('MySQL Cluster 7.0', 'ndb', '2009', 'ga', '', 'c');
+  r('MySQL Cluster 7.1', 'ndb', '2010', 'ga', '', 'c');
+  r('MySQL Cluster 7.2', 'ndb', '2012', 'ga', 'Rebased on the MySQL 5.5 server.', 'c');
+  r('MySQL Cluster 7.3', 'ndb', '2013', 'ga', 'Rebased on MySQL 5.6.', 'c');
+  r('MySQL Cluster 7.4', 'ndb', '2015', 'ga', '', 'c');
+  r('MySQL Cluster 7.5', 'ndb', '2016', 'ga', 'Rebased on MySQL 5.7.', 'c');
+  r('MySQL Cluster 7.6', 'ndb', '2018', 'ga', 'The last release before Cluster moved onto the 8.0 server; the chart shows it feeding into MySQL 8.0.', 'c');
+  r('MySQL Cluster 8.0', 'ndb', '2020', 'ga', 'Cluster numbering aligns with the MySQL server from here on.', 'c');
+  const cad = [['8.1', '2023-07', 'short', ''], ['8.2', '2023-10', 'short', ''], ['8.3', '2024-01', 'short', ''], ['8.4', '2024-04', 'lts', ''], ['9.0', '2024-07', 'short', ''], ['9.1', '2024-10', 'short', ''], ['9.2', '2025-01', 'short', ''], ['9.3', '2025-04', 'short', ''], ['9.4', '2025-07', 'short', ''], ['9.5', '2025-10', 'short', 'q'], ['9.6', '2026-01', 'short', 'q'], ['9.7', '2026-04', 'short', 'q'], ['26.7', '2026-07', 'short', 'q']];
+  cad.forEach(x => r('MySQL Cluster ' + x[0], 'ndb', x[1], x[2], 'Released alongside MySQL ' + x[0] + '.', x[3]));
+
+  // RonDB
+  r('RonDB 21.04', 'rondb', '2021-04', 'ga', 'The first RonDB release, based on MySQL Cluster 8.0.', 'v');
+  r('RonDB 22.10', 'rondb', '2022-10', 'ga', '', 'v');
+  r('RonDB 24.10', 'rondb', '2024-10', 'ga', 'Rebased on MySQL Cluster 8.4.', 'v');
+  r('RonDB 25.10', 'rondb', '2025-10', 'dev', '', 'v');
+  r('RonDB 26.02', 'rondb', '2026-02', 'dev', '', 'v');
+
+  // Percona Server
+  r('Percona Server 5.0', 'percona', '2008', 'ga', 'Percona’s patched builds of MySQL 5.0, where the Percona Server line begins.', 'c');
+  r('Percona Server 5.1', 'percona', '2009', 'ga', 'Introduced XtraDB, Percona’s enhanced InnoDB, which MariaDB then adopted as its default InnoDB.', 'c');
+  r('Percona Server 5.5', 'percona', '2011', 'ga', 'Took group commit from MariaDB 5.3.', 'c');
+  r('Percona Server 5.6', 'percona', '2013-10', 'ga');
+  r('Percona Server 5.7', 'percona', '2016-02', 'ga', 'Its buffer-pool mutex split, temporary-table replication fixes and many bug fixes were contributed back into MySQL 8.0.');
+  r('Percona Server 8.0', 'percona', '2018-12', 'ga');
+  r('Percona Server 8.1', 'percona', '2023-10', 'short', '', 'c');
+  r('Percona Server 8.2', 'percona', '2024-01', 'short', '', 'c');
+  r('Percona Server 8.3', 'percona', '2024-04', 'short', '', 'c');
+  r('Percona Server 8.4', 'percona', '2024-08', 'lts', 'Tracks the MySQL 8.4 Long-Term Support release.', 'c');
+  r('Percona Server 9.7', 'percona', null, 'lts', 'Tracks MySQL 9.7.', 'u');
+
+  // GreatSQL, TenDB, VillageSQL
+  r('GreatSQL 8.0', 'greatsql', '2021', 'ga', 'Based on Percona Server 8.0.', 'c');
+  r('GreatSQL 8.4', 'greatsql', null, 'ga', 'Based on Percona Server 8.4.', 'u');
+  r('TenDB 5.7', 'tendb', null, 'ga', 'Based on Percona Server 5.7.20.', 'u');
+  ['0.0.1', '0.0.2', '0.0.3', '0.0.4', '0.0.5'].forEach(v => r('VillageSQL ' + v, 'village', null, 'ga', v === '0.0.1' ? 'The first release, based on MySQL 8.4.' : '', 'u'));
+  r('VillageSQL 0.0.6', 'village', null, 'ga', 'Ships three server codebases: mysql-8.4 tracking MySQL 8.4, mysql-9.7 tracking MySQL 9.7, and percona-8.4 tracking Percona Server 8.4.', 'u');
+
+  // MariaDB
+  r('MariaDB 5.1', 'mariadb', '2010-02', 'ga', 'The first MariaDB GA: MySQL 5.1 plus the Aria storage engine, with XtraDB as its InnoDB.');
+  r('MariaDB 5.2', 'mariadb', '2010-11', 'ga');
+  r('MariaDB 5.3', 'mariadb', '2012-02', 'ga', 'A large optimizer release (subqueries and joins) and group commit, which Percona Server 5.5 took in.');
+  r('MariaDB 5.5', 'mariadb', '2012-04', 'ga', 'Merges MySQL 5.5.');
+  r('MariaDB 10.0', 'mariadb', '2014-03', 'ga', 'Numbering jumps to 10.0 to mark the split from MySQL 5.6: parallel and multi-source replication, and the CONNECT engine.');
+  r('MariaDB 10.1', 'mariadb', '2015-10', 'ga', 'Galera cluster built in, and data-at-rest encryption.');
+  r('MariaDB 10.2', 'mariadb', '2017-05', 'ga', 'Window functions and recursive CTEs. Takes InnoDB from MySQL 5.7, which replaces XtraDB as the default.');
+  r('MariaDB 10.3', 'mariadb', '2018-05', 'ga', 'System-versioned tables and an Oracle-compatible SQL mode. From 10.3.7 its InnoDB is no longer tied to a MySQL version.');
+  r('MariaDB 10.4', 'mariadb', '2019-06', 'ga');
+  r('MariaDB 10.5', 'mariadb', '2020-06', 'ga', 'ColumnStore becomes part of MariaDB; S3 storage engine.');
+  r('MariaDB 10.6', 'mariadb', '2021-07', 'lts', 'Long-term support. Atomic DDL and JSON_TABLE.');
+  r('MariaDB 10.7', 'mariadb', '2022-02', 'short', 'The first short-term release under MariaDB’s quarterly model.');
+  r('MariaDB 10.8', 'mariadb', '2022-05', 'short');
+  r('MariaDB 10.9', 'mariadb', '2022-08', 'short');
+  r('MariaDB 10.10', 'mariadb', '2022-11', 'short');
+  r('MariaDB 10.11', 'mariadb', '2023-02', 'lts', 'Long-term support.');
+  r('MariaDB 11.0', 'mariadb', '2023-06', 'short', 'A new optimizer cost model.');
+  r('MariaDB 11.1', 'mariadb', '2023-08', 'short');
+  r('MariaDB 11.2', 'mariadb', '2023-11', 'short');
+  r('MariaDB 11.3', 'mariadb', '2024-02', 'short');
+  r('MariaDB 11.4', 'mariadb', '2024-05', 'lts', 'Long-term support.');
+  r('MariaDB 11.5', 'mariadb', '2024-08', 'short');
+  r('MariaDB 11.6', 'mariadb', '2024-11', 'short');
+  r('MariaDB 11.7', 'mariadb', '2025-02', 'short', 'Vector search arrives.');
+  r('MariaDB 11.8', 'mariadb', '2025-06', 'lts', 'Long-term support, including vector search.');
+  r('MariaDB 12.0', 'mariadb', '2025-08', 'short', '', 'c');
+  r('MariaDB 12.1', 'mariadb', '2025-11', 'short', '', 'c');
+  r('MariaDB 12.2', 'mariadb', '2026-02', 'short', '', 'c');
+  r('MariaDB 12.3', 'mariadb', '2026-05', 'lts', 'Long-term support.', 'c');
+  r('MariaDB 13.0', 'mariadb', null, 'short', '', 'u');
+
+  // InfiniDB and ColumnStore
+  r('InfiniDB 1.5', 'columnar', '2010', 'ga', 'Calpont’s columnar engine, built on MySQL 5.1.', 'c');
+  r('InfiniDB 2.0', 'columnar', '2011-03', 'ga', '', 'c');
+  r('InfiniDB 2.2', 'columnar', '2011-10', 'ga', '', 'c');
+  r('InfiniDB 3.5', 'columnar', '2012-06', 'ga', '', 'c');
+  r('InfiniDB 3.6', 'columnar', '2013-03', 'ga', '', 'c');
+  r('InfiniDB 4.0', 'columnar', '2013-10', 'ga', 'Relicensed under GPLv2.', 'c');
+  r('InfiniDB 4.5', 'columnar', '2014-06', 'ga', 'The last InfiniDB release; InfiniDB Inc. closed later in 2014.', 'c');
+  r('MariaDB ColumnStore 1.0', 'columnar', '2016-12', 'ga', 'MariaDB’s continuation of InfiniDB.', '', 'CS 1.0');
+  r('MariaDB ColumnStore 1.1', 'columnar', '2017-12', 'ga', '', 'c', 'CS 1.1');
+  r('MariaDB ColumnStore 1.2', 'columnar', '2019-01', 'ga', '', 'c', 'CS 1.2');
+  r('MariaDB ColumnStore 1.4', 'columnar', '2020-01', 'gone', 'Shipped only with MariaDB Enterprise 10.4 and no longer a separate fork; the code then merged into MariaDB.', 'c', 'CS 1.4');
+
+  // Facebook, WebScaleSQL, AliSQL, Drizzle
+  r('Facebook MySQL 5.6', 'facebook', '2013', 'ga', 'The branch where MyRocks was built.', 'c');
+  r('Facebook MySQL 8.0', 'facebook', '2021', 'ga', '', 'c');
+  r('WebScaleSQL', 'webscale', '2014-03', 'ga', 'Announced as a shared MySQL 5.6 branch; Facebook’s 5.6 work fed into it heavily.', '', '5.6');
+  r('AliSQL 5.6', 'alisql', '2016', 'ga', '', 'c');
+  r('AliSQL 8.0', 'alisql', null, 'ga', '', 'u');
+  r('Drizzle 7.0', 'drizzle', '2011-03', 'ga', 'The first GA release of Drizzle.');
+  r('Drizzle 7.1', 'drizzle', '2012', 'ga', '', 'c');
+  r('Drizzle 7.2', 'drizzle', '2012-09', 'dev', 'Never reached GA; development stopped.', 'c');
+
+  const E = [];
+  const e = (a, b, k) => E.push({ a: a, b: b, k: k || 'c' });
+  const chain = (ids, k) => { for (let i = 1; i < ids.length; i++) e(ids[i - 1], ids[i], k); };
+  const M = v => 'MySQL ' + v;
+  e(M('1.0'), M('3.11.1'), 'd'); e(M('3.11.1'), M('3.19'), 'd');
+  chain(['3.19', '3.20', '3.21', '3.22', '3.23', '4.0', '4.1', '5.0', '5.1'].map(M));
+  e(M('5.1'), M('5.2'), 'd'); e(M('5.1'), M('6.0'), 'd'); e(M('5.2'), M('5.4'), 'd');
+  e(M('6.0'), M('5.5'), 'g'); e(M('5.4'), M('5.5'), 'g');
+  chain(['5.5', '5.6', '5.7', '8.0', '8.1', '8.2', '8.3', '8.4', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '26.7'].map(M));
+  e('MySQL Cluster 7.6', M('8.0'));
+  e('Percona Server 5.7', M('8.0'), 'g');
+  const C = v => 'MySQL Cluster ' + v;
+  e(M('5.1'), C('6.2')); e(M('5.1'), C('6.3')); e(C('6.2'), C('6.3'));
+  e(M('5.1'), C('7.0')); e(C('6.3'), C('7.0'));
+  e(M('5.1'), C('7.1')); e(C('7.0'), C('7.1'));
+  e(M('5.5'), C('7.2')); e(C('7.1'), C('7.2'));
+  e(M('5.6'), C('7.3')); e(C('7.2'), C('7.3'));
+  e(C('7.3'), C('7.4'));
+  e(M('5.7'), C('7.5')); e(C('7.4'), C('7.5'));
+  e(C('7.5'), C('7.6'));
+  e(C('7.6'), C('8.0')); e(M('8.0'), C('8.0'));
+  let prev = '8.0';
+  cad.forEach(x => { e(C(prev), C(x[0])); e(M(x[0]), C(x[0])); prev = x[0]; });
+  const Ma = v => 'MariaDB ' + v;
+  const P = v => 'Percona Server ' + v;
+  e(M('5.1'), Ma('5.1')); e(P('5.1'), Ma('5.1'), 'g');
+  e(M('5.1'), Ma('5.2')); e(Ma('5.1'), Ma('5.2')); e(P('5.1'), Ma('5.2'), 'g');
+  e(M('5.1'), Ma('5.3')); e(Ma('5.2'), Ma('5.3')); e(P('5.1'), Ma('5.3'), 'g');
+  e(M('5.5'), Ma('5.5')); e(Ma('5.3'), Ma('5.5')); e(P('5.5'), Ma('5.5'), 'g');
+  e(Ma('5.5'), Ma('10.0')); e(Ma('10.0'), Ma('10.1'));
+  e(P('5.6'), Ma('10.0'), 'g'); e(P('5.6'), Ma('10.1'), 'g');
+  e(Ma('10.1'), Ma('10.2')); e(M('5.7'), Ma('10.2'), 'g');
+  chain(['10.2', '10.3', '10.4', '10.5', '10.6', '10.7', '10.8', '10.9', '10.10', '10.11', '11.0', '11.1', '11.2', '11.3', '11.4', '11.5', '11.6', '11.7', '11.8', '12.0', '12.1', '12.2', '12.3', '13.0'].map(Ma));
+  const I = v => 'InfiniDB ' + v;
+  const CS = v => 'MariaDB ColumnStore ' + v;
+  e(M('5.1'), I('1.5'));
+  chain(['1.5', '2.0', '2.2', '3.5', '3.6', '4.0', '4.5'].map(I));
+  e(I('4.5'), CS('1.0')); e(Ma('10.1'), CS('1.0'));
+  e(CS('1.0'), CS('1.1')); e(Ma('10.2'), CS('1.1'));
+  e(CS('1.1'), CS('1.2')); e(Ma('10.3'), CS('1.2'));
+  e(CS('1.2'), CS('1.4')); e(CS('1.4'), Ma('10.5'), 'd');
+  e(M('5.0'), P('5.0')); e(M('5.1'), P('5.1')); e(P('5.0'), P('5.1'));
+  e(M('5.5'), P('5.5')); e(P('5.1'), P('5.5')); e(Ma('5.3'), P('5.5'), 'g');
+  e(M('5.6'), P('5.6')); e(P('5.5'), P('5.6'));
+  e(M('5.7'), P('5.7')); e(P('5.6'), P('5.7'));
+  e(P('5.7'), P('8.0')); e(M('8.0'), P('8.0'));
+  [['8.0', '8.1'], ['8.1', '8.2'], ['8.2', '8.3'], ['8.3', '8.4'], ['8.4', '9.7']].forEach(x => { e(P(x[0]), P(x[1])); e(M(x[1]), P(x[1])); });
+  e(M('6.0'), 'Drizzle 7.0'); e('Drizzle 7.0', 'Drizzle 7.1'); e('Drizzle 7.1', 'Drizzle 7.2', 'd');
+  e('RonDB 21.04', 'RonDB 22.10'); e('RonDB 22.10', 'RonDB 24.10');
+  e('RonDB 24.10', 'RonDB 25.10', 'd'); e('RonDB 25.10', 'RonDB 26.02', 'd');
+  e(C('8.0'), 'RonDB 21.04'); e(C('8.0'), 'RonDB 22.10'); e(C('8.4'), 'RonDB 24.10'); e(C('8.4'), 'RonDB 25.10', 'd');
+  e(M('5.6'), 'WebScaleSQL'); e('Facebook MySQL 5.6', 'WebScaleSQL', 'g');
+  e(M('5.6'), 'Facebook MySQL 5.6'); e(M('8.0'), 'Facebook MySQL 8.0'); e('Facebook MySQL 5.6', 'Facebook MySQL 8.0');
+  e(M('5.6'), 'AliSQL 5.6'); e(M('5.7'), 'AliSQL 8.0'); e('AliSQL 5.6', 'AliSQL 8.0');
+  e(P('8.0'), 'GreatSQL 8.0'); e(P('8.4'), 'GreatSQL 8.4'); e('GreatSQL 8.0', 'GreatSQL 8.4');
+  e(P('5.7'), 'TenDB 5.7');
+  e(M('8.4'), 'VillageSQL 0.0.1');
+  chain(['0.0.1', '0.0.2', '0.0.3', '0.0.4', '0.0.5', '0.0.6'].map(v => 'VillageSQL ' + v));
+
+  const nodes = {};
+  const par = {};
+  const chi = {};
+  const parseT = d => {
+    if (!d) return null;
+    const p = d.split('-');
+    return p.length > 1 ? Number(p[0]) + (Number(p[1]) - 0.5) / 12 : Number(p[0]) + 0.5;
+  };
+  R.forEach(n => { nodes[n.id] = n; n.t = parseT(n.d); par[n.id] = []; chi[n.id] = []; });
+  E.forEach(x => {
+    if (!nodes[x.a] || !nodes[x.b]) return;
+    par[x.b].push({ id: x.a, k: x.k });
+    chi[x.a].push({ id: x.b, k: x.k });
+  });
+  R.forEach(n => {
+    if (n.t != null) return;
+    let m = 0;
+    par[n.id].forEach(q => { const t = nodes[q.id].t; if (t != null && t > m) m = t; });
+    n.t = m + 0.3;
+  });
+
+  const EVENTS = [
+    { id: 'ev-ab', t: 1995.4, when: '1995', short: 'MySQL AB', title: 'MySQL AB is founded', note: 'David Axmark, Allan Larsson and Michael “Monty” Widenius found MySQL AB in Sweden. The first MySQL release goes out in May 1995.' },
+    { id: 'ev-ndb', t: 2003.8, when: '2003', short: 'NDB acquired', title: 'MySQL AB acquires NDB', note: 'MySQL AB buys the NDB clustered database technology from Ericsson. It becomes MySQL Cluster.' },
+    { id: 'ev-innodb', t: 2005.8, when: 'October 2005', short: 'Oracle buys InnoDB', title: 'Oracle buys Innobase', note: 'Oracle acquires Innobase Oy, the Finnish company behind InnoDB, MySQL’s main transactional storage engine.' },
+    { id: 'ev-sun', t: 2008.1, when: 'February 2008', short: 'Sun buys MySQL AB', title: 'Sun buys MySQL AB', note: 'Sun Microsystems completes its purchase of MySQL AB for about one billion US dollars. Monty Widenius leaves Sun in early 2009 and starts MariaDB.' },
+    { id: 'ev-oracle', t: 2010.05, when: 'January 2010', short: 'Oracle buys Sun', title: 'Oracle completes its purchase of Sun', note: 'Oracle takes over Sun Microsystems, and with it MySQL. MySQL 5.5, released that December, is the first GA under Oracle.' },
+    { id: 'ev-oursql', t: 2026.4, when: '27 May 2026', short: 'OurSQL Foundation', title: 'The OurSQL Foundation launches', note: 'A vendor-neutral 501(c)(6) non-profit for the MySQL ecosystem: events, shared resources and a collective voice on the MySQL roadmap, working alongside Oracle. Its founding board comes from Percona, PlanetScale, PingCAP, VillageSQL, Alibaba and the wider community, with Vadim Tkachenko as president.', url: 'https://oursqlfoundation.org/news/press-releases/oursql-foundation-launches/' }
+  ];
+
+  return { F: F, LANES: LANES, R: R, nodes: nodes, par: par, chi: chi, EVENTS: EVENTS, edges: E.filter(x => nodes[x.a] && nodes[x.b]) };
+})();
+
+const state = { sel: 'MySQL 5.1', view: 'all', hidden: {}, contrib: true, trace: true };
+const VIEWS = [
+  { id: 'all', label: 'All years', t0: 1994.6, t1: 2027.2 },
+  { id: 'early', label: '1995–2005', t0: 1994.8, t1: 2006 },
+  { id: 'forks', label: '2005–2015', t0: 2004.8, t1: 2015.6 },
+  { id: 'modern', label: '2014–today', t0: 2013.5, t1: 2027.2 },
+  { id: 'cadence', label: 'Innovation era', t0: 2022.6, t1: 2027 }
+];
+const LH = 40;
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const FLAG = {
+  c: 'Approximate: year only, not checked against a release archive.',
+  q: 'Date assumed from the quarterly release cadence; not verified.',
+  v: 'Date read from the year.month version number.',
+  u: 'No release date recorded; placed just after the release it came from.'
+};
+const REL = { c: 'code base', g: 'contributed', d: 'pre-GA path' };
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const r1 = v => Math.round(v * 10) / 10;
+const when = n => {
+  if (!n.d) return 'Not recorded';
+  const p = n.d.split('-');
+  if (n.flag === 'c') return 'c. ' + p[0];
+  return p.length > 1 ? MON[Number(p[1]) - 1] + ' ' + p[0] : p[0];
+};
+const status = n => {
+  if (n.s === 'lts') return 'Long-term support';
+  if (n.s === 'ga') return 'GA';
+  if (n.s === 'dev') return 'In development';
+  if (n.s === 'early') return 'Early, pre-GA';
+  if (n.s === 'gone') return 'Abandoned';
+  if (n.f === 'mysql' || n.f === 'ndb' || n.f === 'percona') return 'Innovation';
+  return 'Short-term';
+};
+
+// The address keeps the selection and range, so a link opens the same view.
+function readHash() {
+  const h = new URLSearchParams(location.hash.slice(1));
+  const sel = h.get('sel');
+  const view = h.get('view');
+  if (sel && (DATA.nodes[sel] || DATA.EVENTS.some(e => e.id === sel))) state.sel = sel;
+  if (view && VIEWS.some(v => v.id === view)) state.view = view;
+}
+function writeHash() {
+  const h = new URLSearchParams({ sel: state.sel, view: state.view });
+  history.replaceState(null, '', '#' + h.toString());
+}
+
+function render() {
+  const D = DATA;
+  const F = D.F;
+  const focused = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.key : null;
+  const V = VIEWS.find(v => v.id === state.view) || VIEWS[0];
+  const PW = Math.max(560, document.getElementById('plotcol').clientWidth);
+  const X = t => 14 + (t - V.t0) / (V.t1 - V.t0) * (PW - 28);
+  const lanes = D.LANES.filter(f => !state.hidden[f]);
+  const laneY = {};
+  lanes.forEach((f, i) => { laneY[f] = i * LH + LH / 2; });
+  const PH = lanes.length * LH;
+  const useK = k => state.contrib || k !== 'g';
+
+  const selNode = D.nodes[state.sel];
+  const selEvent = D.EVENTS.find(e => e.id === state.sel);
+  const walk = (start, map) => {
+    const seen = new Set();
+    const stack = [start];
+    while (stack.length) {
+      const id = stack.pop();
+      (map[id] || []).forEach(x => { if (useK(x.k) && !seen.has(x.id)) { seen.add(x.id); stack.push(x.id); } });
+    }
+    return seen;
+  };
+  let anc = new Set();
+  let desc = new Set();
+  if (selNode) { anc = walk(state.sel, D.par); desc = walk(state.sel, D.chi); anc.add(state.sel); desc.add(state.sel); }
+  const lit = state.trace && selNode;
+  const inLin = id => anc.has(id) || desc.has(id);
+
+  document.getElementById('count').textContent = 'Lineage map · ' + D.R.length + ' releases · ' + D.LANES.length + ' families · 1995 to 2026';
+
+  document.getElementById('views').innerHTML = VIEWS.map(v =>
+    `<button type="button" data-act="view" data-id="${v.id}" data-key="view:${v.id}" aria-pressed="${v.id === V.id}">${esc(v.label)}</button>`).join('');
+
+  document.getElementById('chips').innerHTML = D.LANES.map(f =>
+    `<button type="button" class="chip" data-act="fam" data-id="${f}" data-key="fam:${f}" aria-pressed="${!state.hidden[f]}"><span class="sw" style="background:${F[f].c}"></span>${esc(F[f].name)}</button>`).join('');
+
+  document.getElementById('opt-trace').checked = state.trace;
+  document.getElementById('opt-contrib').checked = state.contrib;
+
+  document.getElementById('lanes').innerHTML = '<div class="head">Events</div>' + lanes.map(f =>
+    `<div class="lane"><span class="bar" style="background:${F[f].c}"></span>${esc(F[f].name)}</div>`).join('') + '<div style="height:26px"></div>';
+
+  const events = D.EVENTS.filter(ev => ev.t >= V.t0 && ev.t <= V.t1).map(ev => ({ ev: ev }));
+  // Two label rows; each label takes the first row with room, else it hides
+  // until hovered or selected. A label that would run off the right edge
+  // hangs to the left of its marker.
+  // The selected event is placed first, so its label always shows.
+  const taken = [[], []];
+  const fits = (row, a, b) => taken[row].every(r => b + 6 <= r[0] || a >= r[1] + 6);
+  events.slice().sort((p, q) => (q.ev.id === state.sel) - (p.ev.id === state.sel)).forEach(o => {
+    const x = X(o.ev.t);
+    const w = o.ev.short.length * 6.4 + 8;
+    const right = x + w / 2 > PW;
+    const a = right ? x - w + 6 : x - w / 2;
+    const row = [0, 1].find(r => fits(r, a, a + w));
+    o.x = x; o.right = right; o.row = row === undefined ? 1 : row; o.hide = row === undefined;
+    if (row !== undefined) taken[row].push([a, a + w]);
+  });
+  document.getElementById('events').innerHTML = events.map(o => {
+    const top = o.row ? 14 : 0;
+    const place = o.right ? 'transform:translateX(calc(-100% + 6px));align-items:flex-end' : '';
+    return `<button type="button" class="ev${o.hide ? ' ev--quiet' : ''}" data-act="sel" data-id="${o.ev.id}" data-key="sel:${o.ev.id}" aria-pressed="${state.sel === o.ev.id}" aria-label="${esc(o.ev.title + ', ' + o.ev.when)}" style="left:${r1(o.x)}px;top:${top}px;height:${44 - top}px;${place}"><span class="t">${esc(o.ev.short)}</span><span class="d"></span></button>`;
+  }).join('');
+
+  let html = '';
+  lanes.forEach((f, i) => { html += `<div class="abs" style="left:0;right:0;top:${i * LH}px;height:${LH}px;background:${i % 2 ? 'var(--stripe)' : 'var(--paper)'}"></div>`; });
+  const span = V.t1 - V.t0;
+  const step = span > 20 ? 5 : (span > 8 ? 2 : 1);
+  const ticks = [];
+  for (let yr = Math.ceil(V.t0 / step) * step; yr <= V.t1; yr += step) ticks.push({ x: r1(X(yr)), label: yr });
+  ticks.forEach(t => { html += `<div class="abs" style="top:0;bottom:0;left:${t.x}px;border-left:1px solid var(--grid)"></div>`; });
+  events.forEach(o => { html += `<div class="abs" style="top:0;bottom:0;left:${r1(o.x)}px;border-left:1px dashed #b9b2a4"></div>`; });
+  lanes.forEach(f => {
+    const xs = D.R.filter(n => n.f === f).map(n => X(n.t));
+    const a = Math.min.apply(null, xs);
+    const b = Math.max.apply(null, xs);
+    html += `<div class="abs" style="left:${r1(a)}px;width:${r1(Math.max(4, b - a))}px;top:${laneY[f] - 2}px;height:4px;border-radius:2px;background:${F[f].c};opacity:.16"></div>`;
+  });
+
+  let paths = '';
+  D.edges.forEach(x => {
+    if (!useK(x.k)) return;
+    const A = D.nodes[x.a];
+    const B = D.nodes[x.b];
+    if (laneY[A.f] == null || laneY[B.f] == null) return;
+    const x1 = X(A.t), x2 = X(B.t), y1 = laneY[A.f], y2 = laneY[B.f];
+    if ((x1 < -60 && x2 < -60) || (x1 > PW + 60 && x2 > PW + 60)) return;
+    let d;
+    if (y1 === y2) d = `M${r1(x1)} ${y1} L${r1(x2)} ${y2}`;
+    else {
+      const k = Math.max(18, Math.abs(x2 - x1) * 0.5);
+      d = `M${r1(x1)} ${y1} C${r1(x1 + k)} ${y1} ${r1(x2 - k)} ${y2} ${r1(x2)} ${y2}`;
+    }
+    const hit = lit && ((anc.has(x.a) && anc.has(x.b)) || (desc.has(x.a) && desc.has(x.b)));
+    const c = x.k === 'g' ? 'var(--contrib)' : F[B.f].c;
+    const dash = x.k === 'g' ? '3 3' : (x.k === 'd' ? '5 4' : 'none');
+    const op = lit ? (hit ? 0.95 : 0.1) : (x.k === 'g' ? 0.75 : 0.55);
+    paths += `<path d="${d}" fill="none" style="stroke:${c};stroke-width:${hit ? 2.2 : 1.4};stroke-dasharray:${dash};opacity:${op}"/>`;
+  });
+  html += `<svg width="${PW}" height="${PH}" aria-hidden="true">${paths}</svg>`;
+
+  const vis = D.R.filter(n => laneY[n.f] != null && n.t >= V.t0 - 0.2 && n.t <= V.t1 + 0.2)
+    .map(n => ({ n, x: X(n.t), y: laneY[n.f] }))
+    .sort((a, b) => (a.y - b.y) || (a.x - b.x));
+  let lastLane = null, lastRight = -1e9;
+  vis.forEach(o => {
+    const n = o.n;
+    const selected = n.id === state.sel;
+    if (o.y !== lastLane) { lastLane = o.y; lastRight = -1e9; }
+    const w = n.v.length * 6.4 + 6;
+    const show = selected || o.x - w / 2 >= lastRight + 3;
+    if (show) lastRight = o.x + w / 2;
+    const c = F[n.f].c;
+    const filled = n.s === 'ga' || n.s === 'lts';
+    const size = n.s === 'lts' ? 14 : (n.s === 'ga' ? 12 : 11);
+    const bs = n.s === 'dev' ? 'dashed' : ((n.s === 'gone' || n.s === 'early') ? 'dotted' : 'solid');
+    const ring = selected ? '0 0 0 3px var(--paper), 0 0 0 5px var(--ink)' : 'none';
+    html += `<button type="button" class="node" data-act="sel" data-id="${esc(n.id)}" data-key="sel:${esc(n.id)}" aria-pressed="${selected}" aria-label="${esc(n.id + ', ' + when(n) + ', ' + status(n))}" style="left:${r1(o.x - 12)}px;top:${o.y - 12}px;z-index:${selected ? 5 : 2};opacity:${lit && !inLin(n.id) ? 0.22 : 1}">` +
+      `<span class="dot" style="width:${size}px;height:${size}px;background:${filled ? c : 'var(--paper)'};border-style:${bs};border-color:${c};box-shadow:${ring}"></span>` +
+      `<span class="lbl" style="display:${show ? 'block' : 'none'};font-weight:${selected ? 600 : 400}">${esc(n.v)}</span></button>`;
+  });
+  const plot = document.getElementById('plot');
+  plot.style.height = PH + 'px';
+  plot.innerHTML = html;
+
+  document.getElementById('axis').innerHTML = ticks.map(t => `<span style="left:${t.x}px">${t.label}</span>`).join('');
+
+  const source = '<div class="source">Lineage from <a href="https://github.com/dveeden/mysql-history-graph">dveeden/mysql-history-graph</a>. Dates and notes added from vendor release history; entries marked c. are approximate.</div>';
+  let panel = '';
+  if (selNode) {
+    const fam = F[selNode.f];
+    const chips = list => list.map(q =>
+      `<button type="button" class="rel" data-act="sel" data-id="${esc(q.id)}" data-key="rel:${esc(q.id)}"><span class="sw" style="background:${F[D.nodes[q.id].f].c}"></span>${esc(q.id)}<span class="why">${REL[q.k]}</span></button>`).join('');
+    const na = anc.size - 1;
+    const nd = desc.size - 1;
+    const par = D.par[selNode.id];
+    const chi = D.chi[selNode.id];
+    panel =
+      `<div style="display:flex;flex-direction:column;gap:8px"><div class="fam"><span class="sw" style="background:${fam.c}"></span>${esc(fam.name)}</div><h2>${esc(selNode.id)}</h2></div>` +
+      `<dl class="facts"><div><dt class="k">Released</dt><dd>${esc(when(selNode))}</dd></div><div><dt class="k">Status</dt><dd>${esc(status(selNode))}</dd></div></dl>` +
+      (FLAG[selNode.flag] ? `<p class="flag">${FLAG[selNode.flag]}</p>` : '') +
+      (selNode.note ? `<p class="note">${esc(selNode.note)}</p>` : '') +
+      (par.length ? `<div class="rels"><span class="k">Built on</span><div class="list">${chips(par)}</div></div>` : '') +
+      (chi.length ? `<div class="rels"><span class="k">Went into</span><div class="list">${chips(chi)}</div></div>` : '') +
+      `<div class="lineage">${na} ${na === 1 ? 'ancestor' : 'ancestors'} · ${nd} ${nd === 1 ? 'descendant' : 'descendants'}</div>` +
+      `<div class="about"><span class="k">About ${esc(fam.name)}</span><p>${esc(fam.blurb)}</p></div>` + source;
+  } else if (selEvent) {
+    panel =
+      `<div class="fam">Company event · ${esc(selEvent.when)}</div><h2>${esc(selEvent.title)}</h2><p class="note">${esc(selEvent.note)}</p>` +
+      (selEvent.url ? `<a class="more" href="${esc(selEvent.url)}">Read the announcement</a>` : '') + source;
+  }
+  document.getElementById('panel').innerHTML = panel;
+
+  if (focused) {
+    const el = document.querySelector(`[data-key="${CSS.escape(focused)}"]`);
+    if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+  }
+  writeHash();
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  const id = b.dataset.id;
+  if (b.dataset.act === 'sel') state.sel = id;
+  else if (b.dataset.act === 'view') state.view = id;
+  else if (b.dataset.act === 'fam') {
+    const h = Object.assign({}, state.hidden);
+    if (h[id]) delete h[id]; else h[id] = true;
+    if (Object.keys(h).length >= DATA.LANES.length) return;
+    state.hidden = h;
+  }
+  render();
+});
+document.getElementById('opt-trace').addEventListener('change', e => { state.trace = e.target.checked; render(); });
+document.getElementById('opt-contrib').addEventListener('change', e => { state.contrib = e.target.checked; render(); });
+let raf = 0;
+window.addEventListener('resize', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); });
+window.addEventListener('hashchange', () => { readHash(); render(); });
+
+readHash();
+render();
+</script>
+</body>
+</html>
