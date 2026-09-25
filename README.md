@@ -22,7 +22,8 @@ Interactive timeline
 `index.html` draws the same lineage as an interactive timeline: one lane per
 family, releases placed by date, a panel with each release's date, status and
 notes, lineage tracing, and filters by family and time range. It is one
-self-contained file with no build step and no external requests, so any static
+self-contained file with no build step and no external requests (the Poppins
+font is embedded; its license is in `fonts/Poppins-OFL.txt`), so any static
 web server can host it:
 
     python3 -m http.server 8000
