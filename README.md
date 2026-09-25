@@ -28,6 +28,13 @@ web server can host it:
 
     python3 -m http.server 8000
 
+Families are filtered from one menu: click to toggle, Alt-click (or "only")
+to isolate, and click a family name on the chart to isolate it or restore
+all. The filter is kept in the address (`#fam=`), so a filtered link opens
+the same view. Brand marks for MySQL, MariaDB, Meta and Alibaba Cloud come
+from [Simple Icons](https://simpleicons.org) (CC0); the trademarks belong to
+their owners. Families without a published mark get a monogram.
+
 The page keeps its own copy of the lineage, so a change to
 `mysql-history-graph.dot` also needs the matching change in the data at the
 top of the script in `index.html`. Dates marked approximate (`c`) have not
