@@ -34,8 +34,9 @@ all. The filter is kept in the address (`#fam=`), so a filtered link opens
 the same view. Brand marks for MySQL, MariaDB, Meta and Alibaba Cloud come
 from [Simple Icons](https://simpleicons.org) (CC0); the trademarks belong to
 their owners. The Percona Server for MySQL and VillageSQL logos
-(`favicon.svg`, `villagesql.svg`) are vector redraws of artwork supplied by
-Percona. Families without a published mark get a monogram.
+(`percona-server.svg`, `villagesql.svg`) are vector redraws of artwork
+supplied by Percona; the Percona logomark (PXC and `favicon.svg`) is from
+`percona/pdmysql-docs`. Families without a published mark get a monogram.
 
 The page keeps its own copy of the lineage, so a change to
 `mysql-history-graph.dot` also needs the matching change in the data at the
