@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MySQL family tree</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22-10 -18 295 272%22%3E%3Cstyle%3Epath{fill:%23282727}%40media (prefers-color-scheme:dark){path{fill:%23fff}}%3C/style%3E%3Cpath d=%22M96.2,107.2l63.5,110.1h-127L96.2,107.2z M166,49.9c10.3-4.9,21.8-6,33-3c12.3,3.3,22.6,11.2,29,22.3 c12.6,21.8,6,49.4-14.4,63.3L166,49.9z M106.6,89.1l30.6-53l0,0l104.5,181.2h-61.2L106.6,89.1z M96.2,71.1L1.5,235.3H273 l-50.3-87.2c29-18.9,38.4-57.6,20.9-88c-8.8-15.2-23-26.1-40-30.7c-15.7-4.2-32.2-2.5-46.6,4.8L137.2,0L96.2,71.1z%22/%3E%3C/svg%3E">
 <meta name="description" content="Every server that grew out of MySQL, on one interactive timeline.">
 <style>
 /* Poppins, latin subset, embedded so the page looks the same everywhere
@@ -47,7 +48,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 a { color: var(--purple); } a:hover { color: var(--purple-dark); }
 
 .hero { background: var(--charcoal); color: #fff; }
-.wrap { max-width: 1440px; margin: 0 auto; padding: 36px 40px 40px; display: flex; flex-direction: column; gap: 22px; }
+.wrap { max-width: none; margin: 0 auto; padding: 36px clamp(16px, 2.5vw, 56px) 40px; display: flex; flex-direction: column; gap: 22px; }
 .hero .wrap { padding-top: 44px; padding-bottom: 40px; }
 header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px 32px; flex-wrap: wrap; }
 .eyebrow { font-size: 14px; font-weight: 500; letter-spacing: 2.1px; color: var(--yellow); }
@@ -64,22 +65,64 @@ h1 em { font-style: normal; color: var(--yellow); }
 
 .timeline { background: var(--paper); border: 1px solid var(--rule); border-radius: 16px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .controls { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; max-width: 720px; }
-.chip { height: 30px; padding: 0 12px; display: flex; align-items: center; gap: 7px; border: 1px solid #d6d7dc; border-radius: 9999px; background: var(--paper); font-size: 12.5px; cursor: pointer; }
-.chip:hover { border-color: var(--purple); }
-.chip .sw { width: 9px; height: 9px; border-radius: 50%; }
-.chip[aria-pressed="false"] { background: #f1f1f4; color: #75747a; border-color: #e6e6ea; }
-.chip[aria-pressed="false"] .sw { opacity: .35; }
-.toggles { display: flex; flex-direction: column; gap: 6px; }
+.controls { align-items: center; }
+.fbar { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.fmenu { position: relative; }
+.ftrig { height: 36px; padding: 0 12px 0 14px; display: flex; align-items: center; gap: 10px; border: 1px solid #d6d7dc; border-radius: 9999px; background: var(--paper); font-size: 13px; cursor: pointer; max-width: 100%; }
+.ftrig:hover, .ftrig[aria-expanded="true"] { border-color: var(--purple); }
+.ftrig .lbl { color: var(--ink-3); }
+.ftrig .val { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
+.ftrig .dots { display: flex; }
+.ftrig .dots span { width: 9px; height: 9px; border-radius: 50%; margin-left: -3px; box-shadow: 0 0 0 1.5px var(--paper); }
+.ftrig .dots span:first-child { margin-left: 0; }
+.ftrig .car { width: 10px; height: 10px; flex-shrink: 0; transition: transform .15s; }
+.ftrig[aria-expanded="true"] .car { transform: rotate(180deg); }
+.freset { height: 36px; padding: 0 10px; border: 0; background: none; color: var(--purple); font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 8px; }
+.freset:hover { background: #653df414; }
+.fpop { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; width: 300px; max-width: calc(100vw - 32px); background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; box-shadow: 0 12px 32px #28272729, 0 2px 6px #2827271a; padding: 6px; }
+.fpop .top { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px 8px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; font-size: 11px; font-weight: 500; letter-spacing: 1.6px; text-transform: uppercase; color: var(--ink-3); }
+.fpop .top button { border: 0; background: none; color: var(--purple); font-size: 12px; font-weight: 500; letter-spacing: 0; text-transform: none; cursor: pointer; padding: 2px 4px; }
+.fpop .top button:disabled { color: #b3b2b8; cursor: default; }
+.frow { display: flex; align-items: center; border-radius: 8px; }
+.frow:hover, .frow:focus-within { background: var(--stripe); }
+.fitem { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 8px; border: 0; background: none; font-size: 13px; text-align: left; cursor: pointer; color: var(--ink); }
+.fitem .box { width: 16px; height: 16px; flex-shrink: 0; border: 1.5px solid #b9b8bf; border-radius: 4px; display: grid; place-items: center; }
+.fitem[aria-checked="true"] .box { background: var(--purple); border-color: var(--purple); }
+.fitem .box svg { opacity: 0; }
+.fitem[aria-checked="true"] .box svg { opacity: 1; }
+.flogo { width: 22px; height: 22px; border-radius: 6px; }
+.flogo svg { width: 12px; height: 12px; fill: currentColor; }
+.flogo b { font-size: 8.5px; font-weight: 600; }
+.fitem .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fitem .ct { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+.fonly { opacity: 0; height: 26px; padding: 0 8px; margin-right: 4px; border: 1px solid #d6d7dc; border-radius: 6px; background: var(--paper); font-size: 11.5px; font-weight: 500; color: var(--purple); cursor: pointer; }
+.frow:hover .fonly, .fonly:focus-visible { opacity: 1; }
+@media (hover: none) { .fonly { opacity: 1; } }
+.fpop .hint { padding: 8px 8px 4px; border-top: 1px solid var(--rule); margin-top: 4px; font-size: 11.5px; color: var(--ink-3); }
+.fpop .hint kbd { font-family: var(--mono); font-size: 10.5px; padding: 1px 5px; border: 1px solid var(--rule); border-radius: 4px; background: var(--stripe); }
+button.lane { border: 0; background: none; padding: 0 10px 0 0; text-align: left; color: inherit; font-family: inherit; cursor: pointer; width: 100%; }
+button.lane:hover { color: var(--purple); }
+.toggles { display: flex; flex-wrap: wrap; gap: 6px 18px; }
 .toggles label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
 .toggles input { width: 16px; height: 16px; margin: 0; accent-color: var(--purple); }
 
 .scroller { overflow-x: auto; }
 .tl-body { display: flex; min-width: 710px; }
-.lanes { width: 150px; flex-shrink: 0; display: flex; flex-direction: column; }
+.lanes { width: 196px; flex-shrink: 0; display: flex; flex-direction: column; }
 .lanes .head { height: 44px; display: flex; align-items: flex-end; padding-bottom: 6px; font-size: 11px; font-weight: 500; letter-spacing: 1.6px; text-transform: uppercase; color: var(--ink-3); }
 .lane { height: 40px; display: flex; align-items: center; gap: 8px; padding-right: 10px; font-size: 12.5px; line-height: 1.15; font-weight: 500; }
 .lane .bar { width: 14px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+.lane .logo, .flogo { flex-shrink: 0; display: grid; place-items: center; color: var(--fc); background: color-mix(in srgb, var(--fc) 13%, #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fc) 22%, transparent); }
+.lane .logo { width: 26px; height: 26px; border-radius: 7px; }
+.lane .logo svg.art { width: 20px; height: 20px; }
+.flogo svg.art { width: 16px; height: 16px; }
+.lane .logo svg { width: 16px; height: 16px; fill: currentColor; }
+.lane .logo b { font-size: 10px; font-weight: 600; letter-spacing: .2px; }
+.lane .txt { display: flex; flex-direction: column; min-width: 0; }
+.lane .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lane .sub { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--ink-3); white-space: nowrap; }
+button.lane:hover .nm { color: var(--purple); }
+button.lane:focus-visible { outline: 2px solid var(--purple); outline-offset: -2px; border-radius: 6px; }
 .plotcol { position: relative; flex-grow: 1; min-width: 0; }
 .events { position: relative; height: 44px; overflow: hidden; }
 .ev { position: absolute; transform: translateX(-50%); padding: 0; border: 0; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
@@ -128,6 +171,12 @@ h1 em { font-style: normal; color: var(--yellow); }
 .source a:hover, .more:hover { color: #fff; }
 .more { font-size: 13.5px; font-weight: 500; }
 @media (max-width: 640px) { .wrap, .hero .wrap { padding: 24px 16px 32px; } }
+.foot { border-top: 1px solid var(--rule); }
+.foot .wrap { padding-top: 20px; padding-bottom: 28px; flex-direction: row; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 13px; color: var(--ink-3); }
+.foot a { color: var(--purple); font-weight: 500; text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+.gh { display: inline-flex; align-items: center; gap: 8px; }
+.gh svg { width: 16px; height: 16px; fill: currentColor; }
 </style>
 </head>
 <body>
@@ -147,7 +196,7 @@ h1 em { font-style: normal; color: var(--yellow); }
   <div class="main">
     <section class="timeline" aria-label="Timeline">
       <div class="controls">
-        <div class="chips" id="chips" role="group" aria-label="Show or hide families"></div>
+        <div class="fbar" id="fbar"></div>
         <div class="toggles">
           <label><input type="checkbox" id="opt-trace" data-key="opt-trace"> Trace lineage of selection</label>
           <label><input type="checkbox" id="opt-contrib" data-key="opt-contrib"> Show contributed code</label>
@@ -155,7 +204,7 @@ h1 em { font-style: normal; color: var(--yellow); }
       </div>
       <div class="scroller">
         <div class="tl-body" id="tl-body">
-          <div class="lanes" id="lanes" aria-hidden="true"></div>
+          <div class="lanes" id="lanes"></div>
           <div class="plotcol" id="plotcol">
             <div class="events" id="events"></div>
             <div class="plot" id="plot"></div>
@@ -175,6 +224,12 @@ h1 em { font-style: normal; color: var(--yellow); }
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
 </div>
+<footer class="foot">
+  <div class="wrap">
+    <a class="gh" href="https://github.com/Percona-Lab/mysql-history-graph"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Source, data and corrections on GitHub</a>
+    <span>Based on <a href="https://github.com/dveeden/mysql-history-graph">dveeden/mysql-history-graph</a> by Daniël van Eeden.</span>
+  </div>
+</footer>
 <script>
 'use strict';
 
@@ -436,7 +491,7 @@ const DATA = (function () {
   return { F: F, LANES: LANES, R: R, nodes: nodes, par: par, chi: chi, EVENTS: EVENTS, edges: E.filter(x => nodes[x.a] && nodes[x.b]) };
 })();
 
-const state = { sel: 'MySQL 5.1', view: 'all', hidden: {}, contrib: true, trace: true };
+const state = { sel: 'MySQL 5.1', view: 'all', hidden: {}, contrib: true, trace: true, menu: false };
 const VIEWS = [
   { id: 'all', label: 'All years', t0: 1994.6, t1: 2027.2 },
   { id: 'early', label: '1995–2005', t0: 1994.8, t1: 2006 },
@@ -454,6 +509,32 @@ const FLAG = {
 };
 const REL = { c: 'code base', g: 'contributed', d: 'pre-GA path' };
 
+// Brand marks from Simple Icons (CC0, simpleicons.org), plus the Percona logomark from
+// percona/pdmysql-docs; trademarks belong to their owners.
+// Families without a published mark get a monogram.
+const MARK = {
+  mysql: 'M16.405 5.501c-.115 0-.193.014-.274.033v.013h.014c.054.104.146.18.214.273.054.107.1.214.154.32l.014-.015c.094-.066.14-.172.14-.333-.04-.047-.046-.094-.08-.14-.04-.067-.126-.1-.18-.153zM5.77 18.695h-.927a50.854 50.854 0 00-.27-4.41h-.008l-1.41 4.41H2.45l-1.4-4.41h-.01a72.892 72.892 0 00-.195 4.41H0c.055-1.966.192-3.81.41-5.53h1.15l1.335 4.064h.008l1.347-4.064h1.095c.242 2.015.384 3.86.428 5.53zm4.017-4.08c-.378 2.045-.876 3.533-1.492 4.46-.482.716-1.01 1.073-1.583 1.073-.153 0-.34-.046-.566-.138v-.494c.11.017.24.026.386.026.268 0 .483-.075.647-.222.197-.18.295-.382.295-.605 0-.155-.077-.47-.23-.944L6.23 14.615h.91l.727 2.36c.164.536.233.91.205 1.123.4-1.064.678-2.227.835-3.483zm12.325 4.08h-2.63v-5.53h.885v4.85h1.745zm-3.32.135l-1.016-.5c.09-.076.177-.158.255-.25.433-.506.648-1.258.648-2.253 0-1.83-.718-2.746-2.155-2.746-.704 0-1.254.232-1.65.697-.43.508-.646 1.256-.646 2.245 0 .972.19 1.686.574 2.14.35.41.877.615 1.583.615.264 0 .506-.033.725-.098l1.325.772.36-.622zM15.5 17.588c-.225-.36-.337-.94-.337-1.736 0-1.393.424-2.09 1.27-2.09.443 0 .77.167.977.5.224.362.336.936.336 1.723 0 1.404-.424 2.108-1.27 2.108-.445 0-.77-.167-.978-.5zm-1.658-.425c0 .47-.172.856-.516 1.156-.344.3-.803.45-1.384.45-.543 0-1.064-.172-1.573-.515l.237-.476c.438.22.833.328 1.19.328.332 0 .593-.073.783-.22a.754.754 0 00.3-.615c0-.33-.23-.61-.648-.845-.388-.213-1.163-.657-1.163-.657-.422-.307-.632-.636-.632-1.177 0-.45.157-.81.47-1.085.315-.278.72-.415 1.22-.415.512 0 .98.136 1.4.41l-.213.476a2.726 2.726 0 00-1.064-.23c-.283 0-.502.068-.654.206a.685.685 0 00-.248.524c0 .328.234.61.666.85.393.215 1.187.67 1.187.67.433.305.648.63.648 1.168zm9.382-5.852c-.535-.014-.95.04-1.297.188-.1.04-.26.04-.274.167.055.053.063.14.11.214.08.134.218.313.346.407.14.11.28.216.427.31.26.16.555.255.81.416.145.094.293.213.44.313.073.05.12.14.214.172v-.02c-.046-.06-.06-.147-.105-.214-.067-.067-.134-.127-.2-.193a3.223 3.223 0 00-.695-.675c-.214-.146-.682-.35-.77-.595l-.013-.014c.146-.013.32-.066.46-.106.227-.06.435-.047.67-.106.106-.027.213-.06.32-.094v-.06c-.12-.12-.21-.283-.334-.395a8.867 8.867 0 00-1.104-.823c-.21-.134-.476-.22-.697-.334-.08-.04-.214-.06-.26-.127-.12-.146-.19-.34-.275-.514a17.69 17.69 0 01-.547-1.163c-.12-.262-.193-.523-.34-.763-.69-1.137-1.437-1.826-2.586-2.5-.247-.14-.543-.2-.856-.274-.167-.008-.334-.02-.5-.027-.11-.047-.216-.174-.31-.235-.38-.24-1.364-.76-1.644-.072-.18.434.267.862.422 1.082.115.153.26.328.34.5.047.116.06.235.107.356.106.294.207.622.347.897.073.14.153.287.247.413.054.073.146.107.167.227-.094.136-.1.334-.154.5-.24.757-.146 1.693.194 2.25.107.166.362.534.703.393.3-.12.234-.5.32-.835.02-.08.007-.133.048-.187v.015c.094.188.188.367.274.555.206.328.566.668.867.895.16.12.287.328.487.402v-.02h-.015c-.043-.058-.1-.086-.154-.133a3.445 3.445 0 01-.35-.4 8.76 8.76 0 01-.747-1.218c-.11-.21-.202-.436-.29-.643-.04-.08-.04-.2-.107-.24-.1.146-.247.273-.32.453-.127.288-.14.642-.188 1.01-.027.007-.014 0-.027.014-.214-.052-.287-.274-.367-.46-.2-.475-.233-1.238-.06-1.785.047-.14.247-.582.167-.716-.042-.127-.174-.2-.247-.303a2.478 2.478 0 01-.24-.427c-.16-.374-.24-.788-.414-1.162-.08-.173-.22-.354-.334-.513-.127-.18-.267-.307-.368-.52-.033-.073-.08-.194-.027-.274.014-.054.042-.075.094-.09.088-.072.335.022.422.062.247.1.455.194.662.334.094.066.195.193.315.226h.14c.214.047.455.014.655.073.355.114.675.28.962.46a5.953 5.953 0 012.085 2.286c.08.154.115.295.188.455.14.33.313.663.455.982.14.315.275.636.476.897.1.14.502.213.682.286.133.06.34.115.46.188.23.14.454.3.67.454.11.076.443.243.463.378z',
+  mariadb: 'M23.157 4.412c-.676.284-.79.31-1.673.372-.65.045-.757.057-1.212.209-.75.246-1.395.75-2.02 1.59-.296.398-1.249 1.913-1.249 1.988 0 .057-.65.998-.915 1.32-.574.713-1.08 1.079-2.14 1.59-.77.36-1.224.524-4.102 1.477-1.073.353-2.133.738-2.367.864-.852.449-1.515 1.036-2.203 1.938-1.003 1.32-.972 1.313-3.042.947a12.264 12.264 0 00-.675-.063c-.644-.05-1.023.044-1.332.334L0 17.193l.177.088c.094.05.353.234.561.398.215.17.461.347.55.391.088.044.17.088.183.101.012.013-.089.17-.228.353-.435.581-.593.871-.574 1.048.019.164.032.17.43.17.517-.006.826-.056 1.261-.208.65-.233 2.058-.94 2.784-1.4.776-.5 1.717-.998 1.956-1.042.082-.02.354-.07.594-.114.58-.107 1.464-.095 2.587.05.108.013.373.045.6.064.227.025.43.057.454.076.026.012.474.037.998.056.934.026 1.104.007 1.3-.189.126-.133.385-.631.498-.985.209-.643.417-.921.366-.492-.113.966-.322 1.692-.713 2.411-.259.499-.663 1.092-.934 1.395-.322.347-.315.36.088.315.619-.063 1.471-.397 2.096-.82.827-.562 1.647-1.691 2.19-3.03.107-.27.22-.22.183.083-.013.094-.038.315-.057.498l-.031.328.353-.202c.833-.48 1.414-1.262 2.127-2.884.227-.518.877-2.922 1.073-3.976a9.64 9.64 0 01.271-1.042c.127-.429.196-.555.48-.858.183-.19.625-.555.978-.808.72-.505.953-.75 1.187-1.205.208-.417.284-1.13.132-1.357-.132-.202-.284-.196-.763.006Z',
+  meta: 'M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z',
+  alibabacloud: 'M3.996 4.517h5.291L8.01 6.324 4.153 7.506a1.668 1.668 0 0 0-1.165 1.601v5.786a1.668 1.668 0 0 0 1.165 1.6l3.857 1.183 1.277 1.807H3.996A3.996 3.996 0 0 1 0 15.487V8.513a3.996 3.996 0 0 1 3.996-3.996m16.008 0h-5.291l1.277 1.807 3.857 1.182c.715.227 1.17.889 1.165 1.601v5.786a1.668 1.668 0 0 1-1.165 1.6l-3.857 1.183-1.277 1.807h5.291A3.996 3.996 0 0 0 24 15.487V8.513a3.996 3.996 0 0 0-3.996-3.996m-4.007 8.345H8.002v-1.804h7.995Z',
+  percona: 'M96.2,107.2l63.5,110.1h-127L96.2,107.2z M166,49.9c10.3-4.9,21.8-6,33-3c12.3,3.3,22.6,11.2,29,22.3 c12.6,21.8,6,49.4-14.4,63.3L166,49.9z M106.6,89.1l30.6-53l0,0l104.5,181.2h-61.2L106.6,89.1z M96.2,71.1L1.5,235.3H273 l-50.3-87.2c29-18.9,38.4-57.6,20.9-88c-8.8-15.2-23-26.1-40-30.7c-15.7-4.2-32.2-2.5-46.6,4.8L137.2,0L96.2,71.1z'
+};
+const LOGO = { pxc: 'percona', ndb: 'mysql', mysql: 'mysql', mariadb: 'mariadb', facebook: 'meta', alisql: 'alibabacloud' };
+// Full-colour logos supplied by Percona, redrawn as vector: Percona Server
+// for MySQL and VillageSQL.
+const ART = {
+  percona: ['40 150 1852 1560', '<path d="M965 250 L150 1640 L1780 1640 Z" fill="#fff" stroke="#e9672a" stroke-width="70" stroke-linejoin="miter"/><g fill="#e9672a"><path d="M772 965 L970 1047 L1150 1047 C1290 1047 1428 1165 1428 1275 C1428 1340 1280 1352 1190 1353 L1077 1543 L1037 1475 L1171 1245 L1267 1245 L1219 1158 L1078 1158 L1126 1244 L953 1540 L879 1410 L913 1352 L799 1352 L690 1160 L578 1352 L518 1352 L629 1160 L822 1052 Z"/><path d="M690 1237 L767 1372 L610 1372 Z"/><path d="M494 1390 L614 1390 L695 1484 L625 1485 L570 1438 L466 1545 L466 1434 Z"/></g><rect x="1267" y="1266" width="46" height="46" rx="12" fill="#fff"/>'],
+  village: ['1310 10 695 510', '<g stroke-linejoin="round" stroke-width="1.5"><path fill="#c966ff" stroke="#c966ff" d="M1323 23 L1573 118 L1418 150 L1362 130 Z"/><path fill="#9400c4" stroke="#9400c4" d="M1375 160 L1573 118 L1410 245 Z"/><path fill="#5f0078" stroke="#5f0078" d="M1410 245 L1573 118 L1513 294 Z"/><path fill="#9933cc" stroke="#9933cc" d="M1573 118 L1631 262 L1513 294 Z"/><path fill="#c966ff" stroke="#c966ff" d="M1513 294 L1631 262 L1705 308 Z"/><path fill="#9400c4" stroke="#9400c4" d="M1513 294 L1705 308 L1563 341 Z"/><path fill="#5f0078" stroke="#5f0078" d="M1563 341 L1705 308 L1737 391 Z"/><path fill="#9933cc" stroke="#9933cc" d="M1563 341 L1737 391 L1446 507 Z"/><path fill="#5f0078" stroke="#5f0078" d="M1446 507 L1737 391 L1660 478 Z"/><path fill="#5f0078" stroke="#5f0078" d="M1697 235 L1737 242 L1705 308 Z"/><path fill="#9933cc" stroke="#9933cc" d="M1737 242 L1773 347 L1705 308 Z"/><path fill="#c966ff" stroke="#c966ff" d="M1705 308 L1773 347 L1737 391 Z"/><path fill="#c966ff" stroke="#c966ff" d="M1657 229 L1715 172 L1990 277 L1737 242 L1697 235 Z"/><path fill="#9400c4" stroke="#9400c4" d="M1737 242 L1990 277 L1783 300 Z"/></g>']
+};
+const MONO = { rondb: 'R', greatsql: 'G', tendb: 'T', columnar: 'CS', webscale: 'WS', drizzle: 'D' };
+// The MySQL mark is dolphin plus wordmark; crop to the dolphin so it reads at icon size.
+const VB = { mysql: '13.7 3.3 10.6 10.6', percona: '-10 -18 295 272' };
+const logo = f => ART[f] ? `<svg viewBox="${ART[f][0]}" class="art" aria-hidden="true">${ART[f][1]}</svg>` : LOGO[f] ? `<svg viewBox="${VB[LOGO[f]] || '0 0 24 24'}" aria-hidden="true"><path d="${MARK[LOGO[f]]}"/></svg>` : `<b aria-hidden="true">${MONO[f] || ''}</b>`;
+const laneSpan = f => {
+  const ns = DATA.R.filter(n => n.f === f);
+  const ys = ns.filter(n => n.d).map(n => Number(n.d.slice(0, 4)));
+  return ns.length + (ns.length === 1 ? ' release' : ' releases') + (ys.length ? ' · ' + Math.min(...ys) + (Math.max(...ys) > Math.min(...ys) ? '–' + String(Math.max(...ys)).slice(2) : '') : '');
+};
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const r1 = v => Math.round(v * 10) / 10;
 const when = n => {
@@ -479,10 +560,18 @@ function readHash() {
   const view = h.get('view');
   if (sel && (DATA.nodes[sel] || DATA.EVENTS.some(e => e.id === sel))) state.sel = sel;
   if (view && VIEWS.some(v => v.id === view)) state.view = view;
+  const fam = h.get('fam');
+  const keep = fam ? fam.split(',').filter(f => DATA.F[f]) : [];
+  state.hidden = {};
+  if (keep.length) DATA.LANES.forEach(f => { if (!keep.includes(f)) state.hidden[f] = true; });
 }
 function writeHash() {
   const h = new URLSearchParams({ sel: state.sel, view: state.view });
-  history.replaceState(null, '', '#' + h.toString());
+  const shown = DATA.LANES.filter(f => !state.hidden[f]);
+  if (shown.length < DATA.LANES.length) h.set('fam', shown.join(','));
+  // Hosts that embed the page in a sandboxed or srcdoc frame refuse history
+  // updates; the view still works there, it just isn't kept in the address.
+  try { history.replaceState(null, '', '#' + h.toString()); } catch (err) { /* not linkable here */ }
 }
 
 function render() {
@@ -520,14 +609,29 @@ function render() {
   document.getElementById('views').innerHTML = VIEWS.map(v =>
     `<button type="button" data-act="view" data-id="${v.id}" data-key="view:${v.id}" aria-pressed="${v.id === V.id}">${esc(v.label)}</button>`).join('');
 
-  document.getElementById('chips').innerHTML = D.LANES.map(f =>
-    `<button type="button" class="chip" data-act="fam" data-id="${f}" data-key="fam:${f}" aria-pressed="${!state.hidden[f]}"><span class="sw" style="background:${F[f].c}"></span>${esc(F[f].name)}</button>`).join('');
+  // Family filter: one trigger, a checkbox menu, and "only" per row
+  // (click toggles, Alt/Option-click or "only" isolates, Show all resets).
+  const shown = D.LANES.filter(f => !state.hidden[f]);
+  const all = shown.length === D.LANES.length;
+  const val = all ? 'All ' + D.LANES.length : shown.length <= 2 ? shown.map(f => F[f].name).join(', ') : shown.length + ' of ' + D.LANES.length;
+  const counts = {};
+  D.R.forEach(n => { counts[n.f] = (counts[n.f] || 0) + 1; });
+  const tick = '<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 5.2 L4 7.6 L8.6 2.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  document.getElementById('fbar').innerHTML =
+    `<div class="fmenu"><button type="button" class="ftrig" data-act="menu" data-key="menu" aria-haspopup="true" aria-expanded="${state.menu}" aria-controls="fpop">` +
+    `<span class="lbl">Families</span>${all ? '' : `<span class="dots" aria-hidden="true">${shown.slice(0, 5).map(f => `<span style="background:${F[f].c}"></span>`).join('')}</span>`}<span class="val">${esc(val)}</span>` +
+    `<svg class="car" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 L5 6.5 L8 3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>` +
+    (state.menu ? `<div class="fpop" id="fpop" role="group" aria-label="Families"><div class="top"><span>${shown.length} of ${D.LANES.length} shown</span><button type="button" data-act="all" data-key="all"${all ? ' disabled' : ''}>Show all</button></div>` +
+      D.LANES.map(f => `<div class="frow"><button type="button" class="fitem" role="menuitemcheckbox" data-act="fam" data-id="${f}" data-key="fam:${f}" aria-checked="${!state.hidden[f]}" title="Alt-click to show only ${esc(F[f].name)}"><span class="box">${tick}</span><span class="flogo" style="--fc:${F[f].c}">${logo(f)}</span><span class="nm">${esc(F[f].name)}</span><span class="ct">${counts[f] || 0}</span></button>` +
+        `<button type="button" class="fonly" data-act="only" data-id="${f}" data-key="only:${f}" aria-label="Show only ${esc(F[f].name)}">only</button></div>`).join('') +
+      `<div class="hint"><kbd>Alt</kbd>-click a family, or click its name on the chart, to show only it.</div></div>` : '') +
+    `</div>` + (all ? '' : `<button type="button" class="freset" data-act="all" data-key="reset">Show all</button>`);
 
   document.getElementById('opt-trace').checked = state.trace;
   document.getElementById('opt-contrib').checked = state.contrib;
 
   document.getElementById('lanes').innerHTML = '<div class="head">Events</div>' + lanes.map(f =>
-    `<div class="lane"><span class="bar" style="background:${F[f].c}"></span>${esc(F[f].name)}</div>`).join('') + '<div style="height:26px"></div>';
+    `<button type="button" class="lane" data-act="lane" data-id="${f}" data-key="lane:${f}" title="${lanes.length === 1 ? 'Show all families' : 'Show only ' + esc(F[f].name)}"><span class="logo" style="--fc:${F[f].c}">${logo(f)}</span><span class="txt"><span class="nm">${esc(F[f].name)}</span><span class="sub">${laneSpan(f)}</span></span></button>`).join('') + '<div style="height:26px"></div>';
 
   const events = D.EVENTS.filter(ev => ev.t >= V.t0 && ev.t <= V.t1).map(ev => ({ ev: ev }));
   // Two label rows; each label takes the first row with room, else it hides
@@ -647,19 +751,32 @@ function render() {
   writeHash();
 }
 
+const only = f => { const h = {}; DATA.LANES.forEach(x => { if (x !== f) h[x] = true; }); return h; };
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
+  if (state.menu && !e.target.closest('.fmenu')) { state.menu = false; if (!b) { render(); return; } }
   if (!b) return;
   const id = b.dataset.id;
   if (b.dataset.act === 'sel') state.sel = id;
   else if (b.dataset.act === 'view') state.view = id;
+  else if (b.dataset.act === 'menu') state.menu = !state.menu;
+  else if (b.dataset.act === 'all') state.hidden = {};
+  else if (b.dataset.act === 'only' || (b.dataset.act === 'fam' && e.altKey)) state.hidden = only(id);
+  else if (b.dataset.act === 'lane') {
+    const shown = DATA.LANES.filter(f => !state.hidden[f]);
+    state.hidden = shown.length === 1 ? {} : only(id);
+  }
   else if (b.dataset.act === 'fam') {
     const h = Object.assign({}, state.hidden);
     if (h[id]) delete h[id]; else h[id] = true;
-    if (Object.keys(h).length >= DATA.LANES.length) return;
-    state.hidden = h;
+    // Unticking the last visible family would leave an empty chart, so
+    // treat it as "show all" instead.
+    state.hidden = Object.keys(h).length >= DATA.LANES.length ? {} : h;
   }
   render();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && state.menu) { state.menu = false; render(); document.querySelector('.ftrig').focus(); }
 });
 document.getElementById('opt-trace').addEventListener('change', e => { state.trace = e.target.checked; render(); });
 document.getElementById('opt-contrib').addEventListener('change', e => { state.contrib = e.target.checked; render(); });
