@@ -21,12 +21,17 @@ Interactive timeline
   Facebook MySQL, WebScaleSQL, AliSQL and Drizzle.
 - **Release details:** click a release to see its date, support status and
   notes, and to trace the releases it came from and led to.
-- **Filters:** show or hide families, and zoom to a time range: all years,
-  1995–2005, 2005–2015, 2014–today, or the Innovation release era.
+- **Filters:** the Families menu toggles families on and off. Alt-click a
+  family, or use its "only" button, to show just that one; "Show all" brings
+  everything back. Clicking a family's name on the chart shows only that
+  family, and clicking it again shows all. You can also zoom to a time range:
+  all years, 1995–2005, 2005–2015, 2014–today, or the Innovation release era.
 - **Events:** milestones such as the founding of MySQL AB and Percona, Sun
   buying MySQL AB, Oracle buying Sun, and the launch of the OurSQL Foundation.
-- **Shareable links:** the selected release and time range are kept in the
-  URL, so a link opens the same view.
+- **Shareable links:** the selected release, time range and family filter
+  are kept in the URL, so a link opens the same view.
+- **Fits any screen:** the chart uses the full width of the window, from a
+  phone up to a large monitor.
 
 Some dates are approximate or inferred. The page marks each one and explains
 why.
@@ -37,6 +42,13 @@ Poppins font is embedded in it. To run it locally:
     python3 -m http.server 8000
 
 Then open http://localhost:8000/.
+
+Logos: MySQL, MariaDB, Meta and Alibaba Cloud marks come from
+[Simple Icons](https://simpleicons.org) (CC0). The Percona logomark (used for
+Percona XtraDB Cluster and as the favicon) is from `percona/pdmysql-docs`.
+`percona-server.svg` and `villagesql.svg` are vector redraws of the Percona
+Server for MySQL and VillageSQL logos. Trademarks belong to their owners.
+Families without a published mark get a monogram.
 
 GraphViz graphs
 ---------------
@@ -66,6 +78,9 @@ script in `index.html`. If you add or correct a release, update both
 welcome, especially ones that replace an approximate date with a sourced one.
 
 Changes to `master` are published to GitHub Pages automatically.
+
+The timeline was built and is kept up to date with an AI coding assistant.
+`PROMPTS.md` has the prompts used and a reusable one for adding releases.
 
 License
 -------
