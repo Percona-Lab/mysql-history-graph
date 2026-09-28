@@ -21,12 +21,13 @@ Interactive timeline
   Facebook MySQL, WebScaleSQL, AliSQL and Drizzle.
 - **Release details:** click a release to see its date, support status and
   notes, and to trace the releases it came from and led to.
-- **Filters:** show or hide families, and zoom to a time range: all years,
-  1995–2005, 2005–2015, 2014–today, or the Innovation release era.
+- **Filters:** pick one or more families to show only those, and zoom to a
+  time range: all years, 1995–2005, 2005–2015, 2014–today, or the Innovation
+  release era.
 - **Events:** milestones such as the founding of MySQL AB and Percona, Sun
   buying MySQL AB, Oracle buying Sun, and the launch of the OurSQL Foundation.
-- **Shareable links:** the selected release and time range are kept in the
-  URL, so a link opens the same view.
+- **Shareable links:** the selected release, time range and family filter
+  are kept in the URL, so a link opens the same view.
 
 Some dates are approximate or inferred. The page marks each one and explains
 why.

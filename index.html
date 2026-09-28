@@ -66,10 +66,10 @@ h1 em { font-style: normal; color: var(--yellow); }
 .controls { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 16px; flex-wrap: wrap; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; max-width: 720px; }
 .chip { height: 30px; padding: 0 12px; display: flex; align-items: center; gap: 7px; border: 1px solid #d6d7dc; border-radius: 9999px; background: var(--paper); font-size: 12.5px; cursor: pointer; }
-.chip:hover { border-color: var(--purple); }
-.chip .sw { width: 9px; height: 9px; border-radius: 50%; }
-.chip[aria-pressed="false"] { background: #f1f1f4; color: #75747a; border-color: #e6e6ea; }
-.chip[aria-pressed="false"] .sw { opacity: .35; }
+.chip:hover { border-color: #a9a8b0; background: var(--stripe); }
+.chip .sw { width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
+.chip[aria-pressed="true"] { padding: 0 11px; border: 2px solid var(--c); background: color-mix(in srgb, var(--c) 12%, var(--paper)); font-weight: 500; }
+.chip--all { --c: var(--purple); color: var(--purple); font-weight: 500; }
 .toggles { display: flex; flex-direction: column; gap: 6px; }
 .toggles label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
 .toggles input { width: 16px; height: 16px; margin: 0; accent-color: var(--purple); }
@@ -147,7 +147,7 @@ h1 em { font-style: normal; color: var(--yellow); }
   <div class="main">
     <section class="timeline" aria-label="Timeline">
       <div class="controls">
-        <div class="chips" id="chips" role="group" aria-label="Show or hide families"></div>
+        <div class="chips" id="chips" role="group" aria-label="Filter by family"></div>
         <div class="toggles">
           <label><input type="checkbox" id="opt-trace" data-key="opt-trace"> Trace lineage of selection</label>
           <label><input type="checkbox" id="opt-contrib" data-key="opt-contrib"> Show contributed code</label>
@@ -436,7 +436,8 @@ const DATA = (function () {
   return { F: F, LANES: LANES, R: R, nodes: nodes, par: par, chi: chi, EVENTS: EVENTS, edges: E.filter(x => nodes[x.a] && nodes[x.b]) };
 })();
 
-const state = { sel: 'MySQL 5.1', view: 'all', hidden: {}, contrib: true, trace: true };
+// only: the families picked in the filter; empty shows them all.
+const state = { sel: 'MySQL 5.1', view: 'all', only: [], contrib: true, trace: true };
 const VIEWS = [
   { id: 'all', label: 'All years', t0: 1994.6, t1: 2027.2 },
   { id: 'early', label: '1995–2005', t0: 1994.8, t1: 2006 },
@@ -472,17 +473,20 @@ const status = n => {
   return 'Short-term';
 };
 
-// The address keeps the selection and range, so a link opens the same view.
+// The address keeps the selection, range and family filter, so a link opens
+// the same view.
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
   const sel = h.get('sel');
   const view = h.get('view');
   if (sel && (DATA.nodes[sel] || DATA.EVENTS.some(e => e.id === sel))) state.sel = sel;
   if (view && VIEWS.some(v => v.id === view)) state.view = view;
+  state.only = (h.get('fam') || '').split(',').filter(f => DATA.F[f]);
 }
 function writeHash() {
   const h = new URLSearchParams({ sel: state.sel, view: state.view });
-  history.replaceState(null, '', '#' + h.toString());
+  if (state.only.length) h.set('fam', state.only.join(','));
+  history.replaceState(null, '', '#' + h.toString().replace(/%2C/g, ','));
 }
 
 function render() {
@@ -492,7 +496,7 @@ function render() {
   const V = VIEWS.find(v => v.id === state.view) || VIEWS[0];
   const PW = Math.max(560, document.getElementById('plotcol').clientWidth);
   const X = t => 14 + (t - V.t0) / (V.t1 - V.t0) * (PW - 28);
-  const lanes = D.LANES.filter(f => !state.hidden[f]);
+  const lanes = state.only.length ? D.LANES.filter(f => state.only.includes(f)) : D.LANES;
   const laneY = {};
   lanes.forEach((f, i) => { laneY[f] = i * LH + LH / 2; });
   const PH = lanes.length * LH;
@@ -520,8 +524,10 @@ function render() {
   document.getElementById('views').innerHTML = VIEWS.map(v =>
     `<button type="button" data-act="view" data-id="${v.id}" data-key="view:${v.id}" aria-pressed="${v.id === V.id}">${esc(v.label)}</button>`).join('');
 
-  document.getElementById('chips').innerHTML = D.LANES.map(f =>
-    `<button type="button" class="chip" data-act="fam" data-id="${f}" data-key="fam:${f}" aria-pressed="${!state.hidden[f]}"><span class="sw" style="background:${F[f].c}"></span>${esc(F[f].name)}</button>`).join('');
+  document.getElementById('chips').innerHTML =
+    `<button type="button" class="chip chip--all" data-act="fam-all" data-key="fam:all" aria-pressed="${!state.only.length}">All families</button>` +
+    D.LANES.map(f =>
+      `<button type="button" class="chip" data-act="fam" data-id="${f}" data-key="fam:${f}" style="--c:${F[f].c}" aria-pressed="${state.only.includes(f)}"><span class="sw"></span>${esc(F[f].name)}</button>`).join('');
 
   document.getElementById('opt-trace').checked = state.trace;
   document.getElementById('opt-contrib').checked = state.contrib;
@@ -653,11 +659,12 @@ document.addEventListener('click', e => {
   const id = b.dataset.id;
   if (b.dataset.act === 'sel') state.sel = id;
   else if (b.dataset.act === 'view') state.view = id;
+  else if (b.dataset.act === 'fam-all') state.only = [];
   else if (b.dataset.act === 'fam') {
-    const h = Object.assign({}, state.hidden);
-    if (h[id]) delete h[id]; else h[id] = true;
-    if (Object.keys(h).length >= DATA.LANES.length) return;
-    state.hidden = h;
+    // Picking a family narrows the chart to it; picking every family is the
+    // same as showing them all.
+    const only = state.only.includes(id) ? state.only.filter(f => f !== id) : state.only.concat(id);
+    state.only = only.length === DATA.LANES.length ? [] : only;
   }
   render();
 });
