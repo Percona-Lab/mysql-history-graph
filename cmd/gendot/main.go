@@ -1,0 +1,233 @@
+// gendot generates mysql-history-graph.dot from data/vendors.json,
+// data/releases.json and data/graph.json. The timeline in index.html reads the
+// same files, so they are the only copy of the lineage.
+//
+// The data files and the first version of this program are by Daniël van Eeden
+// (github.com/dveeden/mysql-history-graph, branch json_data).
+package main
+
+import (
+	"bufio"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"log"
+	"maps"
+	"os"
+	"regexp"
+	"slices"
+	"strings"
+)
+
+type Style struct {
+	Color       string `json:"color,omitempty"`
+	Style       string `json:"style,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
+type Vendor struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	Blurb       string `json:"blurb,omitempty"`
+	Color       string `json:"color"`
+	Link        string `json:"link,omitempty"`
+	Node        struct {
+		Color  string           `json:"color"`
+		Style  string           `json:"style,omitempty"`
+		Status map[string]Style `json:"status,omitempty"`
+	} `json:"node"`
+}
+
+// nodeStyle returns the node color and style for a release. A color on the
+// release itself wins over the vendor's status styles.
+func (v Vendor) nodeStyle(r Release) (color, style string) {
+	color, style = v.Node.Color, v.Node.Style
+	if s, ok := v.Node.Status[r.Status]; ok {
+		if s.Color != "" {
+			color = s.Color
+		}
+		if s.Style != "" {
+			style = s.Style
+		}
+	}
+	if r.Color != "" {
+		color = r.Color
+	}
+	return color, style
+}
+
+type Release struct {
+	Name        string `json:"name"`
+	Vendor      string `json:"vendor"` // Vendor.ID
+	Version     string `json:"version"`
+	Status      string `json:"status"`
+	ReleaseDate string `json:"release_date"`
+	DateFlag    string `json:"date_flag,omitempty"`
+	EOLDate     string `json:"eol_date,omitempty"`
+	Link        string `json:"link,omitempty"`
+	Notes       string `json:"notes,omitempty"`
+	Color       string `json:"color,omitempty"`
+}
+
+type Link struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Status string `json:"status"`
+	Notes  string `json:"notes,omitempty"`
+}
+
+type Graph struct {
+	LinkStyles map[string]Style `json:"link_styles"`
+	Links      []Link           `json:"links"`
+}
+
+var (
+	statuses  = []string{"early", "ga", "short", "lts", "gone", "dev"}
+	dateFlags = []string{"", "c", "q", "v", "u"}
+	dateRe    = regexp.MustCompile(`^(\d{4}(-(0[1-9]|1[0-2]))?)?$`)
+)
+
+func readJSON(path string, v any) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := json.Unmarshal(data, v); err != nil {
+		log.Fatalf("%s: %v", path, err)
+	}
+}
+
+// attrs formats a dot attribute list, or returns "" if there are no attributes.
+func attrs(color, style string) string {
+	var a []string
+	if color != "" {
+		a = append(a, fmt.Sprintf("color=%q", color))
+	}
+	if style != "" {
+		a = append(a, fmt.Sprintf("style=%q", style))
+	}
+	if len(a) == 0 {
+		return ""
+	}
+	return " [" + strings.Join(a, ",") + "]"
+}
+
+func comment(notes string) string {
+	if notes == "" {
+		return ""
+	}
+	return " // " + notes
+}
+
+func main() {
+	dir := flag.String("dir", "data", "directory containing the json files")
+	out := flag.String("o", "mysql-history-graph.dot", "output file")
+	flag.Parse()
+
+	var (
+		vendors  []Vendor
+		releases []Release
+		graph    Graph
+	)
+	readJSON(*dir+"/vendors.json", &vendors)
+	readJSON(*dir+"/releases.json", &releases)
+	readJSON(*dir+"/graph.json", &graph)
+
+	vendorByID := make(map[string]Vendor, len(vendors))
+	for _, v := range vendors {
+		if _, dup := vendorByID[v.ID]; dup {
+			log.Fatalf("duplicate vendor id %q", v.ID)
+		}
+		vendorByID[v.ID] = v
+	}
+	releaseVendor := make(map[string]string, len(releases))
+	for _, r := range releases {
+		if _, ok := vendorByID[r.Vendor]; !ok {
+			log.Fatalf("release %q has unknown vendor %q", r.Name, r.Vendor)
+		}
+		if _, dup := releaseVendor[r.Name]; dup {
+			log.Fatalf("duplicate release %q", r.Name)
+		}
+		if !slices.Contains(statuses, r.Status) {
+			log.Fatalf("release %q has unknown status %q", r.Name, r.Status)
+		}
+		if !slices.Contains(dateFlags, r.DateFlag) {
+			log.Fatalf("release %q has unknown date_flag %q", r.Name, r.DateFlag)
+		}
+		if !dateRe.MatchString(r.ReleaseDate) {
+			log.Fatalf("release %q has bad release_date %q, want YYYY or YYYY-MM", r.Name, r.ReleaseDate)
+		}
+		releaseVendor[r.Name] = r.Vendor
+	}
+	for _, l := range graph.Links {
+		for _, n := range []string{l.From, l.To} {
+			if _, ok := releaseVendor[n]; !ok {
+				log.Fatalf("link %q -> %q has unknown release %q", l.From, l.To, n)
+			}
+		}
+		if _, ok := graph.LinkStyles[l.Status]; !ok {
+			log.Fatalf("link %q -> %q has unknown status %q", l.From, l.To, l.Status)
+		}
+	}
+
+	f, err := os.Create(*out)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w := bufio.NewWriter(f)
+
+	fmt.Fprintln(w, "digraph mysql_history_graph {")
+	fmt.Fprintln(w, "\t/* Generated by cmd/gendot from data/*.json. Do not edit; edit the json and run make.")
+	fmt.Fprintln(w)
+	fmt.Fprintln(w, "\t   Node colors and styles (dotted = abandoned or early, dashed = in development):")
+	for _, v := range vendors {
+		fmt.Fprintf(w, "\t   %-24s %s", v.Name+":", v.Node.Color)
+		for _, status := range slices.Sorted(maps.Keys(v.Node.Status)) {
+			s := v.Node.Status[status]
+			if s.Color != "" {
+				fmt.Fprintf(w, ", %s=%s", status, s.Color)
+			}
+			if s.Style != "" {
+				fmt.Fprintf(w, ", %s=%s", status, s.Style)
+			}
+		}
+		fmt.Fprintln(w)
+	}
+	fmt.Fprintln(w)
+	fmt.Fprintln(w, "\t   Link styles:")
+	for _, status := range slices.Sorted(maps.Keys(graph.LinkStyles)) {
+		fmt.Fprintf(w, "\t   %-24s %s\n", status+":", graph.LinkStyles[status].Description)
+	}
+	fmt.Fprintln(w, "\t*/")
+	fmt.Fprintln(w)
+	fmt.Fprintln(w, "\tnodesep=0.5;")
+	fmt.Fprintln(w, "\tranksep=0.25;")
+
+	for _, v := range vendors {
+		fmt.Fprintln(w)
+		fmt.Fprintf(w, "\t/* %s */\n", v.Name)
+		for _, r := range releases {
+			if r.Vendor != v.ID {
+				continue
+			}
+			color, style := v.nodeStyle(r)
+			fmt.Fprintf(w, "\t%q%s;\n", r.Name, attrs(color, style))
+		}
+		// Links are grouped with the vendor of the release they point to.
+		for _, l := range graph.Links {
+			if releaseVendor[l.To] != v.ID {
+				continue
+			}
+			s := graph.LinkStyles[l.Status]
+			fmt.Fprintf(w, "\t%q -> %q%s;%s\n", l.From, l.To, attrs(s.Color, s.Style), comment(l.Notes))
+		}
+	}
+	fmt.Fprintln(w, "}")
+	if err := w.Flush(); err != nil {
+		log.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
+}

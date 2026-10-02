@@ -1,0 +1,1092 @@
+[
+  {
+    "name": "MySQL 1.0",
+    "vendor": "mysql",
+    "version": "1.0",
+    "status": "early",
+    "release_date": "1995-05",
+    "notes": "Released to a limited group of four people, according to David Axmark and Michael Widenius."
+  },
+  {
+    "name": "MySQL 3.11.1",
+    "vendor": "mysql",
+    "version": "3.11.1",
+    "status": "early",
+    "release_date": "1996-03",
+    "date_flag": "c",
+    "notes": "The first public release, a binary distribution for Solaris."
+  },
+  {
+    "name": "MySQL 3.19",
+    "vendor": "mysql",
+    "version": "3.19",
+    "status": "ga",
+    "release_date": "1996-11",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL 3.20",
+    "vendor": "mysql",
+    "version": "3.20",
+    "status": "ga",
+    "release_date": "1997",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL 3.21",
+    "vendor": "mysql",
+    "version": "3.21",
+    "status": "ga",
+    "release_date": "1998-01",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL 3.22",
+    "vendor": "mysql",
+    "version": "3.22",
+    "status": "ga",
+    "release_date": "1998-10",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL 3.23",
+    "vendor": "mysql",
+    "version": "3.23",
+    "status": "ga",
+    "release_date": "2001-01",
+    "notes": "MyISAM, replication and full-text search, and the table-handler layer that brought in InnoDB and BerkeleyDB as transactional engines."
+  },
+  {
+    "name": "MySQL 4.0",
+    "vendor": "mysql",
+    "version": "4.0",
+    "status": "ga",
+    "release_date": "2003-03",
+    "notes": "Query cache, UNION, InnoDB in the standard server, and the embedded server library."
+  },
+  {
+    "name": "MySQL 4.1",
+    "vendor": "mysql",
+    "version": "4.1",
+    "status": "ga",
+    "release_date": "2004-10",
+    "notes": "Subqueries, prepared statements, per-column character sets with Unicode, and spatial (GIS) types."
+  },
+  {
+    "name": "MySQL 5.0",
+    "vendor": "mysql",
+    "version": "5.0",
+    "status": "ga",
+    "release_date": "2005-10",
+    "notes": "Stored procedures, triggers, views, cursors, INFORMATION_SCHEMA and XA transactions."
+  },
+  {
+    "name": "MySQL 6.0",
+    "vendor": "mysql",
+    "version": "6.0",
+    "status": "gone",
+    "release_date": "2007-06",
+    "date_flag": "c",
+    "notes": "An alpha series built around the Falcon storage engine, cancelled in 2009. Its optimizer work came back in 5.5 and later, and Drizzle forked from its code."
+  },
+  {
+    "name": "MySQL 5.1",
+    "vendor": "mysql",
+    "version": "5.1",
+    "status": "ga",
+    "release_date": "2008-11",
+    "notes": "Partitioning, row-based replication, the event scheduler and the plugin API. The biggest fork point on the chart: MariaDB, Percona Server 5.1, InfiniDB and the 6.x and 7.x Cluster lines all start here."
+  },
+  {
+    "name": "MySQL 5.2",
+    "vendor": "mysql",
+    "version": "5.2",
+    "status": "gone",
+    "release_date": "2008-12",
+    "date_flag": "c",
+    "notes": "A short-lived development series, abandoned before GA."
+  },
+  {
+    "name": "MySQL 5.4",
+    "vendor": "mysql",
+    "version": "5.4",
+    "status": "gone",
+    "release_date": "2009-04",
+    "notes": "Sun’s performance preview with InnoDB scalability patches. It was folded into 5.5 rather than shipped as GA."
+  },
+  {
+    "name": "MySQL 5.5",
+    "vendor": "mysql",
+    "version": "5.5",
+    "status": "ga",
+    "release_date": "2010-12",
+    "notes": "InnoDB becomes the default storage engine; semi-synchronous replication and PERFORMANCE_SCHEMA. The first GA under Oracle."
+  },
+  {
+    "name": "MySQL 5.6",
+    "vendor": "mysql",
+    "version": "5.6",
+    "status": "ga",
+    "release_date": "2013-02",
+    "notes": "GTID-based replication, online DDL, InnoDB full-text search, multi-threaded replicas and optimizer trace."
+  },
+  {
+    "name": "MySQL 5.7",
+    "vendor": "mysql",
+    "version": "5.7",
+    "status": "ga",
+    "release_date": "2015-10",
+    "notes": "A native JSON type, generated columns, multi-source replication and the sys schema. Group Replication became GA during the 5.7 series."
+  },
+  {
+    "name": "MySQL 8.0",
+    "vendor": "mysql",
+    "version": "8.0",
+    "status": "ga",
+    "release_date": "2018-04",
+    "notes": "A transactional data dictionary, window functions, common table expressions, roles and utf8mb4 by default. Numbering skipped from 5.7 to 8.0. End of life in April 2026."
+  },
+  {
+    "name": "MySQL 8.1",
+    "vendor": "mysql",
+    "version": "8.1",
+    "status": "short",
+    "release_date": "2023-07",
+    "notes": "The first Innovation release. From here Oracle ships quarterly Innovation releases between Long-Term Support releases."
+  },
+  {
+    "name": "MySQL 8.2",
+    "vendor": "mysql",
+    "version": "8.2",
+    "status": "short",
+    "release_date": "2023-10"
+  },
+  {
+    "name": "MySQL 8.3",
+    "vendor": "mysql",
+    "version": "8.3",
+    "status": "short",
+    "release_date": "2024-01"
+  },
+  {
+    "name": "MySQL 8.4",
+    "vendor": "mysql",
+    "version": "8.4",
+    "status": "lts",
+    "release_date": "2024-04",
+    "notes": "The first Long-Term Support release under the new model."
+  },
+  {
+    "name": "MySQL 9.0",
+    "vendor": "mysql",
+    "version": "9.0",
+    "status": "short",
+    "release_date": "2024-07",
+    "notes": "A VECTOR data type, and JavaScript stored programs in Enterprise Edition."
+  },
+  {
+    "name": "MySQL 9.1",
+    "vendor": "mysql",
+    "version": "9.1",
+    "status": "short",
+    "release_date": "2024-10"
+  },
+  {
+    "name": "MySQL 9.2",
+    "vendor": "mysql",
+    "version": "9.2",
+    "status": "short",
+    "release_date": "2025-01"
+  },
+  {
+    "name": "MySQL 9.3",
+    "vendor": "mysql",
+    "version": "9.3",
+    "status": "short",
+    "release_date": "2025-04"
+  },
+  {
+    "name": "MySQL 9.4",
+    "vendor": "mysql",
+    "version": "9.4",
+    "status": "short",
+    "release_date": "2025-07"
+  },
+  {
+    "name": "MySQL 9.5",
+    "vendor": "mysql",
+    "version": "9.5",
+    "status": "short",
+    "release_date": "2025-10",
+    "date_flag": "q"
+  },
+  {
+    "name": "MySQL 9.6",
+    "vendor": "mysql",
+    "version": "9.6",
+    "status": "short",
+    "release_date": "2026-01",
+    "date_flag": "q"
+  },
+  {
+    "name": "MySQL 9.7",
+    "vendor": "mysql",
+    "version": "9.7",
+    "status": "lts",
+    "release_date": "2026-04",
+    "date_flag": "q",
+    "notes": "The next Long-Term Support release after 8.4."
+  },
+  {
+    "name": "MySQL 26.7",
+    "vendor": "mysql",
+    "version": "26.7",
+    "status": "short",
+    "release_date": "2026-07",
+    "date_flag": "q",
+    "notes": "The newest MySQL entry on the source chart."
+  },
+  {
+    "name": "MySQL Cluster 6.2",
+    "vendor": "ndb",
+    "version": "6.2",
+    "status": "ga",
+    "release_date": "2007",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL Cluster 6.3",
+    "vendor": "ndb",
+    "version": "6.3",
+    "status": "ga",
+    "release_date": "2008",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL Cluster 7.0",
+    "vendor": "ndb",
+    "version": "7.0",
+    "status": "ga",
+    "release_date": "2009",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL Cluster 7.1",
+    "vendor": "ndb",
+    "version": "7.1",
+    "status": "ga",
+    "release_date": "2010",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL Cluster 7.2",
+    "vendor": "ndb",
+    "version": "7.2",
+    "status": "ga",
+    "release_date": "2012",
+    "date_flag": "c",
+    "notes": "Rebased on the MySQL 5.5 server."
+  },
+  {
+    "name": "MySQL Cluster 7.3",
+    "vendor": "ndb",
+    "version": "7.3",
+    "status": "ga",
+    "release_date": "2013",
+    "date_flag": "c",
+    "notes": "Rebased on MySQL 5.6."
+  },
+  {
+    "name": "MySQL Cluster 7.4",
+    "vendor": "ndb",
+    "version": "7.4",
+    "status": "ga",
+    "release_date": "2015",
+    "date_flag": "c"
+  },
+  {
+    "name": "MySQL Cluster 7.5",
+    "vendor": "ndb",
+    "version": "7.5",
+    "status": "ga",
+    "release_date": "2016",
+    "date_flag": "c",
+    "notes": "Rebased on MySQL 5.7."
+  },
+  {
+    "name": "MySQL Cluster 7.6",
+    "vendor": "ndb",
+    "version": "7.6",
+    "status": "ga",
+    "release_date": "2018",
+    "date_flag": "c",
+    "notes": "The last release before Cluster moved onto the 8.0 server; the chart shows it feeding into MySQL 8.0."
+  },
+  {
+    "name": "MySQL Cluster 8.0",
+    "vendor": "ndb",
+    "version": "8.0",
+    "status": "ga",
+    "release_date": "2020",
+    "date_flag": "c",
+    "notes": "Cluster numbering aligns with the MySQL server from here on."
+  },
+  {
+    "name": "MySQL Cluster 8.1",
+    "vendor": "ndb",
+    "version": "8.1",
+    "status": "short",
+    "release_date": "2023-07",
+    "notes": "Released alongside MySQL 8.1."
+  },
+  {
+    "name": "MySQL Cluster 8.2",
+    "vendor": "ndb",
+    "version": "8.2",
+    "status": "short",
+    "release_date": "2023-10",
+    "notes": "Released alongside MySQL 8.2."
+  },
+  {
+    "name": "MySQL Cluster 8.3",
+    "vendor": "ndb",
+    "version": "8.3",
+    "status": "short",
+    "release_date": "2024-01",
+    "notes": "Released alongside MySQL 8.3."
+  },
+  {
+    "name": "MySQL Cluster 8.4",
+    "vendor": "ndb",
+    "version": "8.4",
+    "status": "lts",
+    "release_date": "2024-04",
+    "notes": "Released alongside MySQL 8.4."
+  },
+  {
+    "name": "MySQL Cluster 9.0",
+    "vendor": "ndb",
+    "version": "9.0",
+    "status": "short",
+    "release_date": "2024-07",
+    "notes": "Released alongside MySQL 9.0."
+  },
+  {
+    "name": "MySQL Cluster 9.1",
+    "vendor": "ndb",
+    "version": "9.1",
+    "status": "short",
+    "release_date": "2024-10",
+    "notes": "Released alongside MySQL 9.1."
+  },
+  {
+    "name": "MySQL Cluster 9.2",
+    "vendor": "ndb",
+    "version": "9.2",
+    "status": "short",
+    "release_date": "2025-01",
+    "notes": "Released alongside MySQL 9.2."
+  },
+  {
+    "name": "MySQL Cluster 9.3",
+    "vendor": "ndb",
+    "version": "9.3",
+    "status": "short",
+    "release_date": "2025-04",
+    "notes": "Released alongside MySQL 9.3."
+  },
+  {
+    "name": "MySQL Cluster 9.4",
+    "vendor": "ndb",
+    "version": "9.4",
+    "status": "short",
+    "release_date": "2025-07",
+    "notes": "Released alongside MySQL 9.4."
+  },
+  {
+    "name": "MySQL Cluster 9.5",
+    "vendor": "ndb",
+    "version": "9.5",
+    "status": "short",
+    "release_date": "2025-10",
+    "date_flag": "q",
+    "notes": "Released alongside MySQL 9.5."
+  },
+  {
+    "name": "MySQL Cluster 9.6",
+    "vendor": "ndb",
+    "version": "9.6",
+    "status": "short",
+    "release_date": "2026-01",
+    "date_flag": "q",
+    "notes": "Released alongside MySQL 9.6."
+  },
+  {
+    "name": "MySQL Cluster 9.7",
+    "vendor": "ndb",
+    "version": "9.7",
+    "status": "short",
+    "release_date": "2026-04",
+    "date_flag": "q",
+    "notes": "Released alongside MySQL 9.7."
+  },
+  {
+    "name": "MySQL Cluster 26.7",
+    "vendor": "ndb",
+    "version": "26.7",
+    "status": "short",
+    "release_date": "2026-07",
+    "date_flag": "q",
+    "notes": "Released alongside MySQL 26.7."
+  },
+  {
+    "name": "RonDB 21.04",
+    "vendor": "rondb",
+    "version": "21.04",
+    "status": "ga",
+    "release_date": "2021-04",
+    "date_flag": "v",
+    "notes": "The first RonDB release, based on MySQL Cluster 8.0."
+  },
+  {
+    "name": "RonDB 22.10",
+    "vendor": "rondb",
+    "version": "22.10",
+    "status": "ga",
+    "release_date": "2022-10",
+    "date_flag": "v"
+  },
+  {
+    "name": "RonDB 24.10",
+    "vendor": "rondb",
+    "version": "24.10",
+    "status": "ga",
+    "release_date": "2024-10",
+    "date_flag": "v",
+    "notes": "Rebased on MySQL Cluster 8.4."
+  },
+  {
+    "name": "RonDB 25.10",
+    "vendor": "rondb",
+    "version": "25.10",
+    "status": "dev",
+    "release_date": "2025-10",
+    "date_flag": "v"
+  },
+  {
+    "name": "RonDB 26.02",
+    "vendor": "rondb",
+    "version": "26.02",
+    "status": "dev",
+    "release_date": "2026-02",
+    "date_flag": "v"
+  },
+  {
+    "name": "Percona Server 5.0",
+    "vendor": "percona",
+    "version": "5.0",
+    "status": "ga",
+    "release_date": "2008",
+    "date_flag": "c",
+    "notes": "Percona’s patched “highperf” builds of MySQL 5.0 (Percona was founded in 2006), where the Percona Server line begins."
+  },
+  {
+    "name": "Percona Server 5.1",
+    "vendor": "percona",
+    "version": "5.1",
+    "status": "ga",
+    "release_date": "2009",
+    "date_flag": "c",
+    "notes": "Introduced XtraDB, Percona’s enhanced InnoDB (announced December 2008 as a fork of the InnoDB plugin 1.0.2), which MariaDB then adopted as its default InnoDB. The “Percona Server” name was adopted during the 5.1 series in 2010."
+  },
+  {
+    "name": "Percona Server 5.5",
+    "vendor": "percona",
+    "version": "5.5",
+    "status": "ga",
+    "release_date": "2011-04",
+    "notes": "First stable release 5.5.11-20.2 on 28 April 2011. Took binary log group commit from MariaDB 5.3."
+  },
+  {
+    "name": "Percona Server 5.6",
+    "vendor": "percona",
+    "version": "5.6",
+    "status": "ga",
+    "release_date": "2013-10",
+    "notes": "First GA release 5.6.13-61.0 on 7 October 2013."
+  },
+  {
+    "name": "Percona Server 5.7",
+    "vendor": "percona",
+    "version": "5.7",
+    "status": "ga",
+    "release_date": "2016-02",
+    "notes": "First GA release 5.7.10-3 on 5 February 2016. Percona’s buffer-pool mutex split (MySQL bug #75534) was contributed back and landed in MySQL 8.0 as WL#8423."
+  },
+  {
+    "name": "Percona Server 8.0",
+    "vendor": "percona",
+    "version": "8.0",
+    "status": "ga",
+    "release_date": "2018-12",
+    "notes": "First GA release 8.0.13-3 on 21 December 2018. 8.0.46-37 (June 2026) was the last standard release; MySQL 8.0 is end of life, and 8.0 continues only as post-EOL builds."
+  },
+  {
+    "name": "Percona Server 8.1",
+    "vendor": "percona",
+    "version": "8.1",
+    "status": "short",
+    "release_date": "2023-11",
+    "notes": "Percona’s first Innovation release, 8.1.0-1 on 27 November 2023."
+  },
+  {
+    "name": "Percona Server 8.2",
+    "vendor": "percona",
+    "version": "8.2",
+    "status": "short",
+    "release_date": "2024-02",
+    "notes": "8.2.0-1 on 5 February 2024."
+  },
+  {
+    "name": "Percona Server 8.3",
+    "vendor": "percona",
+    "version": "8.3",
+    "status": "short",
+    "release_date": "2024-04",
+    "notes": "8.3.0-1 on 16 April 2024, the last Percona Innovation release: Percona skipped all of MySQL 9.0–9.6."
+  },
+  {
+    "name": "Percona Server 8.4",
+    "vendor": "percona",
+    "version": "8.4",
+    "status": "lts",
+    "release_date": "2024-08",
+    "notes": "Tracks the MySQL 8.4 Long-Term Support release. First release 8.4.0-1 on 28 August 2024."
+  },
+  {
+    "name": "Percona Server 9.7",
+    "vendor": "percona",
+    "version": "9.7",
+    "status": "lts",
+    "release_date": "2026-08",
+    "notes": "Tracks the MySQL 9.7 Long-Term Support release. 9.7.0 was skipped; the first build is 9.7.1-1 on 5 August 2026."
+  },
+  {
+    "name": "Percona XtraDB Cluster 5.5",
+    "vendor": "pxc",
+    "version": "PXC 5.5",
+    "status": "ga",
+    "release_date": "2012-04",
+    "notes": "The first GA release, 5.5.20, built on Percona Server 5.5.20 and the Galera library."
+  },
+  {
+    "name": "Percona XtraDB Cluster 5.6",
+    "vendor": "pxc",
+    "version": "PXC 5.6",
+    "status": "ga",
+    "release_date": "2014-01",
+    "notes": "First GA release 5.6.15-25.2 on 30 January 2014, with Galera 3."
+  },
+  {
+    "name": "Percona XtraDB Cluster 5.7",
+    "vendor": "pxc",
+    "version": "PXC 5.7",
+    "status": "ga",
+    "release_date": "2016-09",
+    "notes": "First GA release 5.7.14-26.17 on 29 September 2016. Added PXC Strict Mode and Galera instrumentation in Performance Schema."
+  },
+  {
+    "name": "Percona XtraDB Cluster 8.0",
+    "vendor": "pxc",
+    "version": "PXC 8.0",
+    "status": "ga",
+    "release_date": "2020-04",
+    "notes": "First GA release 8.0.18-9.3 on 29 April 2020, with Galera 4. PXC 8.1–8.3 Innovation builds were never publicly released."
+  },
+  {
+    "name": "Percona XtraDB Cluster 8.4",
+    "vendor": "pxc",
+    "version": "PXC 8.4",
+    "status": "lts",
+    "release_date": "2024-12",
+    "notes": "First release 8.4.2-2 on 11 December 2024, tracking MySQL 8.4 LTS."
+  },
+  {
+    "name": "Percona XtraDB Cluster 9.7",
+    "vendor": "pxc",
+    "version": "PXC 9.7",
+    "status": "lts",
+    "release_date": "2026-09",
+    "notes": "First release 9.7.1-1, shipped in Percona Distribution for MySQL 9.7.1 on 10 September 2026. 9.7.0 was skipped."
+  },
+  {
+    "name": "GreatSQL 8.0",
+    "vendor": "greatsql",
+    "version": "8.0",
+    "status": "ga",
+    "release_date": "2021",
+    "date_flag": "c",
+    "notes": "Based on Percona Server 8.0."
+  },
+  {
+    "name": "GreatSQL 8.4",
+    "vendor": "greatsql",
+    "version": "8.4",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u",
+    "notes": "Based on Percona Server 8.4."
+  },
+  {
+    "name": "TenDB 5.7",
+    "vendor": "tendb",
+    "version": "5.7",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u",
+    "notes": "Based on Percona Server 5.7.20."
+  },
+  {
+    "name": "VillageSQL 0.0.1",
+    "vendor": "village",
+    "version": "0.0.1",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u",
+    "notes": "The first release, based on MySQL 8.4."
+  },
+  {
+    "name": "VillageSQL 0.0.2",
+    "vendor": "village",
+    "version": "0.0.2",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u"
+  },
+  {
+    "name": "VillageSQL 0.0.3",
+    "vendor": "village",
+    "version": "0.0.3",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u"
+  },
+  {
+    "name": "VillageSQL 0.0.4",
+    "vendor": "village",
+    "version": "0.0.4",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u"
+  },
+  {
+    "name": "VillageSQL 0.0.5",
+    "vendor": "village",
+    "version": "0.0.5",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u"
+  },
+  {
+    "name": "VillageSQL 0.0.6",
+    "vendor": "village",
+    "version": "0.0.6",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u",
+    "notes": "Ships three server codebases: mysql-8.4 tracking MySQL 8.4, mysql-9.7 tracking MySQL 9.7, and percona-8.4 tracking Percona Server 8.4."
+  },
+  {
+    "name": "MariaDB 5.1",
+    "vendor": "mariadb",
+    "version": "5.1",
+    "status": "ga",
+    "release_date": "2010-02",
+    "notes": "The first MariaDB GA: MySQL 5.1 plus the Aria storage engine, with XtraDB as its InnoDB."
+  },
+  {
+    "name": "MariaDB 5.2",
+    "vendor": "mariadb",
+    "version": "5.2",
+    "status": "ga",
+    "release_date": "2010-11"
+  },
+  {
+    "name": "MariaDB 5.3",
+    "vendor": "mariadb",
+    "version": "5.3",
+    "status": "ga",
+    "release_date": "2012-02",
+    "notes": "A large optimizer release (subqueries and joins) and group commit, which Percona Server 5.5 took in."
+  },
+  {
+    "name": "MariaDB 5.5",
+    "vendor": "mariadb",
+    "version": "5.5",
+    "status": "ga",
+    "release_date": "2012-04",
+    "notes": "Merges MySQL 5.5."
+  },
+  {
+    "name": "MariaDB 10.0",
+    "vendor": "mariadb",
+    "version": "10.0",
+    "status": "ga",
+    "release_date": "2014-03",
+    "notes": "Numbering jumps to 10.0 to mark the split from MySQL 5.6: parallel and multi-source replication, and the CONNECT engine."
+  },
+  {
+    "name": "MariaDB 10.1",
+    "vendor": "mariadb",
+    "version": "10.1",
+    "status": "ga",
+    "release_date": "2015-10",
+    "notes": "Galera cluster built in, and data-at-rest encryption."
+  },
+  {
+    "name": "MariaDB 10.2",
+    "vendor": "mariadb",
+    "version": "10.2",
+    "status": "ga",
+    "release_date": "2017-05",
+    "notes": "Window functions and recursive CTEs. Takes InnoDB from MySQL 5.7, which replaces XtraDB as the default."
+  },
+  {
+    "name": "MariaDB 10.3",
+    "vendor": "mariadb",
+    "version": "10.3",
+    "status": "ga",
+    "release_date": "2018-05",
+    "notes": "System-versioned tables and an Oracle-compatible SQL mode. From 10.3.7 its InnoDB is no longer tied to a MySQL version."
+  },
+  {
+    "name": "MariaDB 10.4",
+    "vendor": "mariadb",
+    "version": "10.4",
+    "status": "ga",
+    "release_date": "2019-06"
+  },
+  {
+    "name": "MariaDB 10.5",
+    "vendor": "mariadb",
+    "version": "10.5",
+    "status": "ga",
+    "release_date": "2020-06",
+    "notes": "ColumnStore becomes part of MariaDB; S3 storage engine."
+  },
+  {
+    "name": "MariaDB 10.6",
+    "vendor": "mariadb",
+    "version": "10.6",
+    "status": "lts",
+    "release_date": "2021-07",
+    "notes": "Long-term support. Atomic DDL and JSON_TABLE."
+  },
+  {
+    "name": "MariaDB 10.7",
+    "vendor": "mariadb",
+    "version": "10.7",
+    "status": "short",
+    "release_date": "2022-02",
+    "notes": "The first short-term release under MariaDB’s quarterly model."
+  },
+  {
+    "name": "MariaDB 10.8",
+    "vendor": "mariadb",
+    "version": "10.8",
+    "status": "short",
+    "release_date": "2022-05"
+  },
+  {
+    "name": "MariaDB 10.9",
+    "vendor": "mariadb",
+    "version": "10.9",
+    "status": "short",
+    "release_date": "2022-08"
+  },
+  {
+    "name": "MariaDB 10.10",
+    "vendor": "mariadb",
+    "version": "10.10",
+    "status": "short",
+    "release_date": "2022-11"
+  },
+  {
+    "name": "MariaDB 10.11",
+    "vendor": "mariadb",
+    "version": "10.11",
+    "status": "lts",
+    "release_date": "2023-02",
+    "notes": "Long-term support."
+  },
+  {
+    "name": "MariaDB 11.0",
+    "vendor": "mariadb",
+    "version": "11.0",
+    "status": "short",
+    "release_date": "2023-06",
+    "notes": "A new optimizer cost model."
+  },
+  {
+    "name": "MariaDB 11.1",
+    "vendor": "mariadb",
+    "version": "11.1",
+    "status": "short",
+    "release_date": "2023-08"
+  },
+  {
+    "name": "MariaDB 11.2",
+    "vendor": "mariadb",
+    "version": "11.2",
+    "status": "short",
+    "release_date": "2023-11"
+  },
+  {
+    "name": "MariaDB 11.3",
+    "vendor": "mariadb",
+    "version": "11.3",
+    "status": "short",
+    "release_date": "2024-02"
+  },
+  {
+    "name": "MariaDB 11.4",
+    "vendor": "mariadb",
+    "version": "11.4",
+    "status": "lts",
+    "release_date": "2024-05",
+    "notes": "Long-term support."
+  },
+  {
+    "name": "MariaDB 11.5",
+    "vendor": "mariadb",
+    "version": "11.5",
+    "status": "short",
+    "release_date": "2024-08"
+  },
+  {
+    "name": "MariaDB 11.6",
+    "vendor": "mariadb",
+    "version": "11.6",
+    "status": "short",
+    "release_date": "2024-11"
+  },
+  {
+    "name": "MariaDB 11.7",
+    "vendor": "mariadb",
+    "version": "11.7",
+    "status": "short",
+    "release_date": "2025-02",
+    "notes": "Vector search arrives."
+  },
+  {
+    "name": "MariaDB 11.8",
+    "vendor": "mariadb",
+    "version": "11.8",
+    "status": "lts",
+    "release_date": "2025-06",
+    "notes": "Long-term support, including vector search."
+  },
+  {
+    "name": "MariaDB 12.0",
+    "vendor": "mariadb",
+    "version": "12.0",
+    "status": "short",
+    "release_date": "2025-08",
+    "date_flag": "c"
+  },
+  {
+    "name": "MariaDB 12.1",
+    "vendor": "mariadb",
+    "version": "12.1",
+    "status": "short",
+    "release_date": "2025-11",
+    "date_flag": "c"
+  },
+  {
+    "name": "MariaDB 12.2",
+    "vendor": "mariadb",
+    "version": "12.2",
+    "status": "short",
+    "release_date": "2026-02",
+    "date_flag": "c"
+  },
+  {
+    "name": "MariaDB 12.3",
+    "vendor": "mariadb",
+    "version": "12.3",
+    "status": "lts",
+    "release_date": "2026-05",
+    "date_flag": "c",
+    "notes": "Long-term support."
+  },
+  {
+    "name": "MariaDB 13.0",
+    "vendor": "mariadb",
+    "version": "13.0",
+    "status": "short",
+    "release_date": "",
+    "date_flag": "u"
+  },
+  {
+    "name": "InfiniDB 1.5",
+    "vendor": "columnar",
+    "version": "1.5",
+    "status": "ga",
+    "release_date": "2010",
+    "date_flag": "c",
+    "notes": "Calpont’s columnar engine, built on MySQL 5.1."
+  },
+  {
+    "name": "InfiniDB 2.0",
+    "vendor": "columnar",
+    "version": "2.0",
+    "status": "ga",
+    "release_date": "2011-03",
+    "date_flag": "c"
+  },
+  {
+    "name": "InfiniDB 2.2",
+    "vendor": "columnar",
+    "version": "2.2",
+    "status": "ga",
+    "release_date": "2011-10",
+    "date_flag": "c"
+  },
+  {
+    "name": "InfiniDB 3.5",
+    "vendor": "columnar",
+    "version": "3.5",
+    "status": "ga",
+    "release_date": "2012-06",
+    "date_flag": "c"
+  },
+  {
+    "name": "InfiniDB 3.6",
+    "vendor": "columnar",
+    "version": "3.6",
+    "status": "ga",
+    "release_date": "2013-03",
+    "date_flag": "c"
+  },
+  {
+    "name": "InfiniDB 4.0",
+    "vendor": "columnar",
+    "version": "4.0",
+    "status": "ga",
+    "release_date": "2013-10",
+    "date_flag": "c",
+    "notes": "Relicensed under GPLv2."
+  },
+  {
+    "name": "InfiniDB 4.5",
+    "vendor": "columnar",
+    "version": "4.5",
+    "status": "ga",
+    "release_date": "2014-06",
+    "date_flag": "c",
+    "notes": "The last InfiniDB release; InfiniDB Inc. closed later in 2014."
+  },
+  {
+    "name": "MariaDB ColumnStore 1.0",
+    "vendor": "columnar",
+    "version": "CS 1.0",
+    "status": "ga",
+    "release_date": "2016-12",
+    "notes": "MariaDB’s continuation of InfiniDB.",
+    "color": "dodgerblue"
+  },
+  {
+    "name": "MariaDB ColumnStore 1.1",
+    "vendor": "columnar",
+    "version": "CS 1.1",
+    "status": "ga",
+    "release_date": "2017-12",
+    "date_flag": "c",
+    "color": "dodgerblue"
+  },
+  {
+    "name": "MariaDB ColumnStore 1.2",
+    "vendor": "columnar",
+    "version": "CS 1.2",
+    "status": "ga",
+    "release_date": "2019-01",
+    "date_flag": "c",
+    "color": "dodgerblue"
+  },
+  {
+    "name": "MariaDB ColumnStore 1.4",
+    "vendor": "columnar",
+    "version": "CS 1.4",
+    "status": "gone",
+    "release_date": "2020-01",
+    "date_flag": "c",
+    "notes": "Shipped only with MariaDB Enterprise 10.4 and no longer a separate fork; the code then merged into MariaDB.",
+    "color": "dodgerblue"
+  },
+  {
+    "name": "Facebook MySQL 5.6",
+    "vendor": "facebook",
+    "version": "5.6",
+    "status": "ga",
+    "release_date": "2013",
+    "date_flag": "c",
+    "notes": "The branch where MyRocks was built."
+  },
+  {
+    "name": "Facebook MySQL 8.0",
+    "vendor": "facebook",
+    "version": "8.0",
+    "status": "ga",
+    "release_date": "2021",
+    "date_flag": "c"
+  },
+  {
+    "name": "WebScaleSQL",
+    "vendor": "webscale",
+    "version": "5.6",
+    "status": "ga",
+    "release_date": "2014-03",
+    "notes": "Announced as a shared MySQL 5.6 branch; Facebook’s 5.6 work fed into it heavily."
+  },
+  {
+    "name": "AliSQL 5.6",
+    "vendor": "alisql",
+    "version": "5.6",
+    "status": "ga",
+    "release_date": "2016",
+    "date_flag": "c"
+  },
+  {
+    "name": "AliSQL 8.0",
+    "vendor": "alisql",
+    "version": "8.0",
+    "status": "ga",
+    "release_date": "",
+    "date_flag": "u"
+  },
+  {
+    "name": "Drizzle 7.0",
+    "vendor": "drizzle",
+    "version": "7.0",
+    "status": "ga",
+    "release_date": "2011-03",
+    "notes": "The first GA release of Drizzle."
+  },
+  {
+    "name": "Drizzle 7.1",
+    "vendor": "drizzle",
+    "version": "7.1",
+    "status": "ga",
+    "release_date": "2012",
+    "date_flag": "c"
+  },
+  {
+    "name": "Drizzle 7.2",
+    "vendor": "drizzle",
+    "version": "7.2",
+    "status": "dev",
+    "release_date": "2012-09",
+    "date_flag": "c",
+    "notes": "Never reached GA; development stopped."
+  }
+]

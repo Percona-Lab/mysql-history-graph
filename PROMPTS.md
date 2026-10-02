@@ -13,8 +13,8 @@ first line to the families you want checked.
 
 > Check the MySQL family tree for new or changed releases in: MySQL, MySQL
 > Cluster, Percona Server, Percona XtraDB Cluster, MariaDB. For each family,
-> compare the entries in the data at the top of the script in `index.html`
-> with the vendor's own release notes.
+> compare the entries in `data/releases.json` with the vendor's own release
+> notes.
 >
 > - Add each missing major or LTS series, dated by the month of its first GA
 >   build. Put the first GA build and its exact date in the note, for example
@@ -24,8 +24,8 @@ first line to the families you want checked.
 >   the flag on any date you could not confirm.
 > - Add the lineage edges: the release it is built on, and the previous
 >   release in its own family.
-> - Make the same change in `mysql-history-graph.dot`, following the colour
->   legend at the top of that file, and run `make`.
+> - Add the links to `data/graph.json`, then run `make` to regenerate
+>   `mysql-history-graph.dot`.
 > - Open the page in a browser, select each new release, and confirm there
 >   are no console errors.
 >
