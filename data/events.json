@@ -1,0 +1,59 @@
+[
+  {
+    "id": "ev-ab",
+    "t": 1995.4,
+    "when": "1995",
+    "short": "MySQL AB",
+    "title": "MySQL AB is founded",
+    "note": "David Axmark, Allan Larsson and Michael “Monty” Widenius found MySQL AB in Sweden. The first MySQL release goes out in May 1995."
+  },
+  {
+    "id": "ev-ndb",
+    "t": 2003.8,
+    "when": "2003",
+    "short": "NDB acquired",
+    "title": "MySQL AB acquires NDB",
+    "note": "MySQL AB buys the NDB clustered database technology from Ericsson. It becomes MySQL Cluster."
+  },
+  {
+    "id": "ev-innodb",
+    "t": 2005.8,
+    "when": "October 2005",
+    "short": "Oracle buys InnoDB",
+    "title": "Oracle buys Innobase",
+    "note": "Oracle acquires Innobase Oy, the Finnish company behind InnoDB, MySQL’s main transactional storage engine."
+  },
+  {
+    "id": "ev-percona",
+    "t": 2006.5,
+    "when": "2006",
+    "short": "Percona founded",
+    "title": "Percona is founded",
+    "note": "Peter Zaitsev and Vadim Tkachenko, who had led MySQL AB’s High Performance Group, leave MySQL AB and found Percona as a MySQL performance consultancy. Its patched builds become Percona Server."
+  },
+  {
+    "id": "ev-sun",
+    "t": 2008.1,
+    "when": "February 2008",
+    "short": "Sun buys MySQL AB",
+    "title": "Sun buys MySQL AB",
+    "note": "Sun Microsystems completes its purchase of MySQL AB for about one billion US dollars. Monty Widenius leaves Sun in early 2009 and starts MariaDB."
+  },
+  {
+    "id": "ev-oracle",
+    "t": 2010.05,
+    "when": "January 2010",
+    "short": "Oracle buys Sun",
+    "title": "Oracle completes its purchase of Sun",
+    "note": "Oracle takes over Sun Microsystems, and with it MySQL. MySQL 5.5, released that December, is the first GA under Oracle."
+  },
+  {
+    "id": "ev-oursql",
+    "t": 2026.4,
+    "when": "27 May 2026",
+    "short": "OurSQL Foundation",
+    "title": "The OurSQL Foundation launches",
+    "note": "A vendor-neutral 501(c)(6) non-profit for the MySQL ecosystem: events, shared resources and a collective voice on the MySQL roadmap, working alongside Oracle. Its founding board comes from Percona, PlanetScale, PingCAP, VillageSQL, Alibaba and the wider community, with Vadim Tkachenko as president.",
+    "url": "https://oursqlfoundation.org/news/press-releases/oursql-foundation-launches/"
+  }
+]

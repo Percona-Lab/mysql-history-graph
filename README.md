@@ -55,7 +55,7 @@ GraphViz graphs
 
 | Source | Shows |
 | --- | --- |
-| `mysql-history-graph.dot` | MySQL and its forks |
+| `mysql-history-graph.dot` | MySQL and its forks, generated from `data/` |
 | `mysql-only-history.dot` | MySQL releases only |
 | `innodb-history-graph.dot` | InnoDB versions, from MySQL 5.1 to 5.6, and XtraDB |
 | `mysql-bug.dot` | Life cycle of a MySQL bug report |
@@ -72,10 +72,23 @@ version, using data from bugs.mysql.com.
 Contributing
 ------------
 
-The timeline keeps its own copy of the lineage, in the data at the top of the
-script in `index.html`. If you add or correct a release, update both
-`index.html` and the matching `.dot` file, then run `make`. Pull requests are
-welcome, especially ones that replace an approximate date with a sourced one.
+The lineage lives in `data/`, and both the timeline and the main GraphViz
+graph are built from it:
+
+| File | Holds |
+| --- | --- |
+| `data/vendors.json` | The families: name, lane colour, description, and the node colours used in the graph |
+| `data/releases.json` | Every release: family, version, status, date, a flag for approximate dates, notes |
+| `data/graph.json` | The lineage links (`derived`, `contribution`, `non-ga`) and their styles |
+| `data/events.json` | The company events shown above the timeline |
+
+If you add or correct a release, edit the JSON, then run `make`. That runs
+`cmd/gendot` (Go) to rewrite `mysql-history-graph.dot` and fails on an unknown
+family, status or release name, so typos are caught early. `index.html` fetches
+the JSON, so to preview it locally serve the folder, for example with
+`python3 -m http.server`. Opening the file directly will not load the data.
+Pull requests are welcome, especially ones that replace an approximate date
+with a sourced one.
 
 Changes to `master` are published to GitHub Pages automatically.
 
@@ -92,5 +105,6 @@ Related projects
 ----------------
 
 * [dveeden/mysql-history-graph](https://github.com/dveeden/mysql-history-graph),
-  the original
+  the original. The JSON data format and `cmd/gendot` come from Daniël van
+  Eeden's `json_data` branch.
 * [RDBMS Timeline](https://github.com/rafaelma/rdbms-timeline)

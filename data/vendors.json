@@ -1,0 +1,167 @@
+[
+  {
+    "id": "ndb",
+    "name": "MySQL Cluster",
+    "color": "#8e1f1b",
+    "blurb": "The NDB shared-nothing clustered engine, first developed at Ericsson and bought by MySQL AB in 2003. It ships as its own product line on top of the matching MySQL server.",
+    "node": {
+      "color": "red3",
+      "status": {
+        "short": {
+          "color": "pink"
+        }
+      }
+    }
+  },
+  {
+    "id": "rondb",
+    "name": "RonDB",
+    "color": "#a07c00",
+    "blurb": "A distribution of NDB Cluster from Logical Clocks (Hopsworks), led by NDB’s original designer Mikael Ronström. Its version numbers are year.month.",
+    "node": {
+      "color": "#ffdf00",
+      "status": {
+        "dev": {
+          "style": "dashed"
+        }
+      }
+    }
+  },
+  {
+    "id": "mysql",
+    "name": "MySQL",
+    "color": "#c4312a",
+    "blurb": "The original, created by MySQL AB (David Axmark, Allan Larsson and Michael “Monty” Widenius). Owned by Sun from 2008 and by Oracle since 2010. Since 8.1 it ships quarterly Innovation releases between Long-Term Support releases.",
+    "node": {
+      "color": "red",
+      "status": {
+        "short": {
+          "color": "pink"
+        },
+        "gone": {
+          "style": "dotted"
+        },
+        "early": {
+          "style": "dotted"
+        },
+        "lts": {
+          "color": "red"
+        }
+      }
+    }
+  },
+  {
+    "id": "village",
+    "name": "VillageSQL",
+    "color": "#9446c9",
+    "blurb": "A fork that tracks MySQL 8.4. Its 0.0.6 release ships three server codebases: one tracking MySQL 8.4, one MySQL 9.7 and one Percona Server 8.4.",
+    "node": {
+      "color": "#cc66ff"
+    }
+  },
+  {
+    "id": "percona",
+    "name": "Percona Server",
+    "color": "#c8680a",
+    "blurb": "Percona’s drop-in replacement for MySQL: XtraDB (its enhanced InnoDB), extra instrumentation, and open-source versions of features MySQL keeps in Enterprise Edition, such as the thread pool and audit logging.",
+    "node": {
+      "color": "orange",
+      "status": {
+        "short": {
+          "color": "orange3"
+        }
+      }
+    }
+  },
+  {
+    "id": "pxc",
+    "name": "Percona XtraDB Cluster",
+    "color": "#1a7f7a",
+    "blurb": "Percona’s synchronous multi-primary cluster: Percona Server plus the Galera replication library from Codership and the wsrep API. Each major version is built on the matching Percona Server release.",
+    "node": {
+      "color": "#1a7f7a"
+    }
+  },
+  {
+    "id": "greatsql",
+    "name": "GreatSQL",
+    "color": "#2f6b3a",
+    "blurb": "A fork of Percona Server maintained by the GreatOpenSource community in China.",
+    "node": {
+      "color": "darkgreen"
+    }
+  },
+  {
+    "id": "tendb",
+    "name": "TenDB",
+    "color": "#0a5bd6",
+    "blurb": "The fork by Tencent Games’ CROS DBA team, used as the data layer of TenDB Cluster. Based on Percona Server 5.7.20.",
+    "node": {
+      "color": "#006eff"
+    }
+  },
+  {
+    "id": "mariadb",
+    "name": "MariaDB",
+    "color": "#1f4fa3",
+    "blurb": "Forked from MySQL 5.1 in 2009 by Michael Widenius after Sun bought MySQL AB. MySQL is named after his daughter My, MariaDB after his younger daughter Maria. Numbering jumped from 5.5 to 10.0 in 2014.",
+    "node": {
+      "color": "blue",
+      "status": {
+        "short": {
+          "color": "lightblue"
+        }
+      }
+    }
+  },
+  {
+    "id": "columnar",
+    "name": "InfiniDB → ColumnStore",
+    "color": "#3d6f94",
+    "blurb": "A columnar analytics engine. Calpont’s InfiniDB was relicensed under the GPL in 2013; after InfiniDB Inc. closed in 2014, MariaDB carried it on as ColumnStore, which later became part of MariaDB itself.",
+    "node": {
+      "color": "steelblue"
+    }
+  },
+  {
+    "id": "facebook",
+    "name": "Facebook MySQL",
+    "color": "#3b5998",
+    "blurb": "Meta’s production branches of MySQL (facebook/mysql-5.6 and mysql-8.0), home of MyRocks, the RocksDB storage engine.",
+    "node": {
+      "color": "#3b5998"
+    }
+  },
+  {
+    "id": "webscale",
+    "name": "WebScaleSQL",
+    "color": "#5a2f7a",
+    "blurb": "A shared branch of MySQL 5.6 announced in 2014 by engineers at Facebook, Google, LinkedIn and Twitter, pooling their patches for running MySQL at very large scale.",
+    "node": {
+      "color": "#330e50"
+    }
+  },
+  {
+    "id": "alisql",
+    "name": "AliSQL",
+    "color": "#c24f00",
+    "blurb": "Alibaba’s open-source branch of MySQL (github.com/alibaba/AliSQL).",
+    "node": {
+      "color": "#ff6a00"
+    }
+  },
+  {
+    "id": "drizzle",
+    "name": "Drizzle",
+    "color": "#1e2a78",
+    "blurb": "A rewrite of the MySQL 6.0 code as a small, plugin-based kernel, led by Brian Aker from 2008. It dropped stored procedures, triggers, views and the query cache. Development stopped after 7.2.",
+    "node": {
+      "color": "blue4",
+      "status": {
+        "dev": {
+          "style": "dashed"
+        }
+      }
+    }
+  }
+]
